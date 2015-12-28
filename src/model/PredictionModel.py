@@ -7,7 +7,10 @@ import PredictionEvaluator
 # ln(y) = ln(x) + c
 # y = e^(ln(x) + c)
 def predictByLogLinear(x, c):
-    return math.exp(math.log(x) + c)
+    if 0 == x:
+        return 0
+    else:
+        return math.exp(math.log(x) + c)
 
 # Linear Model
 # y = ax
@@ -24,39 +27,41 @@ def predictByMultipleLinear(x, a):
         rv = rv + x[i] * 1. * a[i]
     return rv
 
-def predict(infile):
+def predict(infile, outfile):
     fd = open(infile.decode('UTF-8'), 'r')
-    predictionFd = open(infile.decode('UTF-8') + '_Prediction', 'w')
-    #fdLogLinear = open(infile.decode('UTF-8') + '_Prediction_LogLinear', 'w')
-    #fdLinearLS = open(infile.decode('UTF-8') + '_Prediction_LinearLS', 'w')
-    #fdLinearLRS = open(infile.decode('UTF-8') + '_Prediction_LinearLRS', 'w')
-    obsList = list()
-    prdLogLinearList = list()
-    prdLinearLsList = list()
-    prdLinearLrsList = list()
+    predictionFd = open(outfile.decode('UTF-8'), 'w')
+    rseLogLinearList = list()
+    rseLinearLsList = list()
+    rseLinearLrsList = list()
     for line in fd.readlines():
-        # id, n7, n30
         fields = line.strip().split('\t', -1)
-        if 0 == int(fields[1]):
-            continue
-        vObs = int(fields[2])
-        vLogLinear = int(predictByLogLinear(int(fields[1]), 0.7884630))
-        vLinearLs = int(predictByLinear(int(fields[1]), 2.887398))
-        vLinearLrs = int(predictByLinear(int(fields[1]), 1.503376))
-        obsList.append(vObs)
-        prdLogLinearList.append(vLogLinear)
-        prdLinearLsList.append(vLinearLs)
-        prdLinearLrsList.append(vLinearLrs)
-        predictionFd.write(fields[0] + '\t' + fields[1] + '\t' + fields[2] + '\t' 
-                          + str(vLogLinear) + '\t' + str(PredictionEvaluator.getRSE(vObs, vLogLinear)) + '\t' 
-                          + str(vLinearLs) + '\t' + str(PredictionEvaluator.getRSE(vObs, vLinearLs)) + '\t'
-                          + str(vLinearLrs) + '\t' + str(PredictionEvaluator.getRSE(vObs, vLinearLrs)) + '\n')
-    predictionFd.write('Log-Linear MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLogLinearList)) + ', ' 
-                       + 'Linear-LS MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLinearLsList)) + ', '
-                       + 'Linear-LRS MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLinearLrsList)) + '\n')
-    print('Log-Linear MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLogLinearList)) + ', ' 
-          + 'Linear-LS MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLinearLsList)) + ', ' 
-          + 'Linear-LRS MRSE = ' + str(PredictionEvaluator.getMRSE(obsList, prdLinearLrsList)) + '\n')
+        # id, n7, n30
+        predictionFd.write(fields[0] + '\t' + fields[1] + '\t' + fields[2])
+        n7 = int(fields[1])
+        obsN30 = int(fields[2])
+        # Log-Linear
+        prdN30 = predictByLogLinear(n7, 0.3466935)
+        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rseLogLinearList.append(rse)
+        predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
+        # Linear-LS
+        prdN30 = predictByLinear(n7, 1.293118)
+        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rseLinearLsList.append(rse)
+        predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
+        # Linear-LRS
+        prdN30 = predictByLinear(int(fields[1]), 1.235237)
+        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rseLinearLrsList.append(rse)
+        predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
+        
+        predictionFd.write('\n')
+    
+    mrseStr = 'Log-Linear MRSE = ' + str(sum(rseLogLinearList) / len(rseLogLinearList)) + ', ' \
+                + 'Linear-LS MRSE = ' + str(sum(rseLinearLsList) / len(rseLinearLsList)) + ', ' \
+                + 'Linear-LRS MRSE = ' + str(sum(rseLinearLrsList) / len(rseLinearLrsList)) + '\n'
+    predictionFd.write(mrseStr)
+    print(mrseStr)
     fd.close()
     #fdLogLinear.close()
     #fdLinearLS.close()
@@ -64,7 +69,8 @@ def predict(infile):
     predictionFd.close()
 
 if __name__ == '__main__':
-    predict('C:\\Documents and Settings\\Administrator\\桌面\\vc\\data\\N7N30')
+    predict('F:\\Video_Popularity\\rawdata\\N7N30', 
+            'F:\\Video_Popularity\\analysis\\2_predict_value\\N7N30_Prediction')
     # Log-Linear with directly LS
     # Log-Linear with least relative squares
     # Log-Linear with maximum likelihood estimation
