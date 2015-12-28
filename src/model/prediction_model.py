@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
-import PredictionEvaluator
+import calcu_error
 
 # Log-Linear Model
 # ln(y) = ln(x) + c
@@ -41,17 +41,17 @@ def predict(infile, outfile):
         obsN30 = int(fields[2])
         # Log-Linear
         prdN30 = predictByLogLinear(n7, 0.3466935)
-        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rse = calcu_error.getRSE(obsN30, prdN30)
         rseLogLinearList.append(rse)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         # Linear-LS
         prdN30 = predictByLinear(n7, 1.293118)
-        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rse = calcu_error.getRSE(obsN30, prdN30)
         rseLinearLsList.append(rse)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         # Linear-LRS
         prdN30 = predictByLinear(int(fields[1]), 1.235237)
-        rse = PredictionEvaluator.getRSE(obsN30, prdN30)
+        rse = calcu_error.getRSE(obsN30, prdN30)
         rseLinearLrsList.append(rse)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         

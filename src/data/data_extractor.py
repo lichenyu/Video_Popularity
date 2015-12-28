@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import PubFunc
+import pubfunc
 
 def getN7N30(infiles, outfile, positiveCheck = True):
     outFd = open(outfile.decode('UTF-8'), 'w')
@@ -40,7 +40,7 @@ def getI7N30(infiles, outfile, positiveCheck = True):
                     continue
                 for i in range(1, 7 + 1):
                     n7List.append(int(fields[i]))
-                i7List = PubFunc.getVciByVc(n7List)
+                i7List = pubfunc.getVciByVc(n7List)
                 outFd.write(fields[0])
                 for i in range(0, 7):
                     outFd.write('\t' + str(i7List[i]))
