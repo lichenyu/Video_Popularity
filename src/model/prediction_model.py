@@ -27,12 +27,18 @@ def predictByMultipleLinear(x, a):
         rv = rv + x[i] * 1. * a[i]
     return rv
 
-def predict(infile, outfile):
+def predictByN7(infile, outfile):
     fd = open(infile.decode('UTF-8'), 'r')
     predictionFd = open(outfile.decode('UTF-8'), 'w')
-    rseLogLinearList = list()
-    rseLinearLsList = list()
-    rseLinearLrsList = list()
+    rseLogLinearList = []
+    rseLinearLsList = []
+    rseLinearLrsList = []
+    seLogLinearList = []
+    seLinearLsList = []
+    seLinearLrsList = []
+    logLinearPara = 0.3466935
+    linearLsPara = 1.293118
+    linearLrsPara = 1.235237
     for line in fd.readlines():
         fields = line.strip().split('\t', -1)
         # id, n7, n30
@@ -40,37 +46,88 @@ def predict(infile, outfile):
         n7 = int(fields[1])
         obsN30 = int(fields[2])
         # Log-Linear
-        prdN30 = predictByLogLinear(n7, 0.3466935)
+        prdN30 = int(predictByLogLinear(n7, logLinearPara))
         rse = calcu_error.getRSE(obsN30, prdN30)
         rseLogLinearList.append(rse)
+        se = calcu_error.getSE(obsN30, prdN30)
+        seLogLinearList.append(se)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         # Linear-LS
-        prdN30 = predictByLinear(n7, 1.293118)
+        prdN30 = int(predictByLinear(n7, linearLsPara))
         rse = calcu_error.getRSE(obsN30, prdN30)
         rseLinearLsList.append(rse)
+        se = calcu_error.getSE(obsN30, prdN30)
+        seLinearLsList.append(se)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         # Linear-LRS
-        prdN30 = predictByLinear(int(fields[1]), 1.235237)
+        prdN30 = int(predictByLinear(int(fields[1]), linearLrsPara))
         rse = calcu_error.getRSE(obsN30, prdN30)
         rseLinearLrsList.append(rse)
+        se = calcu_error.getSE(obsN30, prdN30)
+        seLinearLrsList.append(se)
         predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
         
         predictionFd.write('\n')
     
     mrseStr = 'Log-Linear MRSE = ' + str(sum(rseLogLinearList) / len(rseLogLinearList)) + ', ' \
                 + 'Linear-LS MRSE = ' + str(sum(rseLinearLsList) / len(rseLinearLsList)) + ', ' \
-                + 'Linear-LRS MRSE = ' + str(sum(rseLinearLrsList) / len(rseLinearLrsList)) + '\n'
+                + 'Linear-LRS MRSE = ' + str(sum(rseLinearLrsList) / len(rseLinearLrsList)) + '\n' \
+                + 'Log-Linear MSE = ' + str(sum(seLogLinearList) / len(seLogLinearList)) + ', ' \
+                + 'Linear-LS MSE = ' + str(sum(seLinearLsList) / len(seLinearLsList)) + ', ' \
+                + 'Linear-LRS MSE = ' + str(sum(seLinearLrsList) / len(seLinearLrsList)) + '\n'
     predictionFd.write(mrseStr)
     print(mrseStr)
     fd.close()
-    #fdLogLinear.close()
-    #fdLinearLS.close()
-    #fdLinearLRS.close()
+    predictionFd.close()
+    
+def predictByI7(infile, outfile):
+    fd = open(infile.decode('UTF-8'), 'r')
+    predictionFd = open(outfile.decode('UTF-8'), 'w')
+    rseMultiLinearLsList = []
+    rseMultiLinearLrsList = []
+    seMultiLinearLsList = []
+    seMultiLinearLrsList = []
+    multiLinearLsPara = [1.2682858, 0.9973000, 1.6227158, 0.4786203, 1.7795820, 2.3959505, 1.6855002]
+    multiLinearLrsPara = [1.179124, 1.289353, 1.241006, 1.506698, 1.352725, 1.731021, 2.237415]
+    for line in fd.readlines():
+        fields = line.strip().split('\t', -1)
+        # id, i1, ..., i7, n30
+        predictionFd.write(fields[0] + '\t' + fields[8])
+        iList = []
+        for i in range(1, 1 + 7):
+            iList.append(int(fields[i]))
+        obsN30 = int(fields[8])
+        # Linear-LS
+        prdN30 = int(predictByMultipleLinear(iList, multiLinearLsPara))
+        rse = calcu_error.getRSE(obsN30, prdN30)
+        rseMultiLinearLsList.append(rse)
+        se = calcu_error.getSE(obsN30, prdN30)
+        seMultiLinearLsList.append(se)
+        predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
+        # Linear-LRS
+        prdN30 = int(predictByMultipleLinear(iList, multiLinearLrsPara))
+        rse = calcu_error.getRSE(obsN30, prdN30)
+        rseMultiLinearLrsList.append(rse)
+        se = calcu_error.getSE(obsN30, prdN30)
+        seMultiLinearLrsList.append(se)
+        predictionFd.write('\t' + str(prdN30) + '\t' + str(rse))
+        
+        predictionFd.write('\n')
+    
+    mrseStr = 'Multi-Linear-LS MRSE = ' + str(sum(rseMultiLinearLsList) / len(rseMultiLinearLsList)) + ', ' \
+                + 'Multi-Linear-LRS MRSE = ' + str(sum(rseMultiLinearLrsList) / len(rseMultiLinearLrsList)) + '\n' \
+                + 'Multi-Linear-LS MSE = ' + str(sum(seMultiLinearLsList) / len(seMultiLinearLsList)) + ', ' \
+                + 'Multi-Linear-LRS MSE = ' + str(sum(seMultiLinearLrsList) / len(seMultiLinearLrsList)) + '\n'
+    predictionFd.write(mrseStr)
+    print(mrseStr)
+    fd.close()
     predictionFd.close()
 
 if __name__ == '__main__':
-    predict('F:\\Video_Popularity\\rawdata\\N7N30', 
+    predictByN7('F:\\Video_Popularity\\rawdata\\N7N30', 
             'F:\\Video_Popularity\\analysis\\2_predict_value\\N7N30_Prediction')
+    predictByI7('F:\\Video_Popularity\\rawdata\\I7N30', 
+            'F:\\Video_Popularity\\analysis\\2_predict_value\\I7N30_Prediction')
     # Log-Linear with directly LS
     # Log-Linear with least relative squares
     # Log-Linear with maximum likelihood estimation
