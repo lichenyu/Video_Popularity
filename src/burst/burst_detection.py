@@ -64,9 +64,6 @@ def typeSteady(pctList):
             return False
     return True
 
-
-
-
 def getAverageRateAfterBurst(pctlist):
     # find burst (vci > 2. * 1 / length(vcilist))
     idx = 0
@@ -84,33 +81,53 @@ def getRateForBurstSlow(infile, outfile):
     for line in inFd.readlines():
 #         outFd.write(line)
         fields = line.strip().split('\t', -1)
-        vci7list = []
+        vcilist = []
         # vid, i1, i2, ..., i30
-        for fie in fields[1 : 1 + 7]:
-            vci7list.append(int(fie))
-        pct7List = getPercentage(vci7list) 
-#         outFd.write(fields[0])
-#         for pct in pct7List:
-#             outFd.write('\t' + str('%.06f' % pct))
-#         outFd.write('\n')
-#         for s in getAverageRateAfterBurst(pct7List):
-#             outFd.write(str('%.06f\t' % s))
-#         outFd.write('\n')
-        #outFd.write(str(sum(getAverageRateAfterBurst(pct7List)) / len(getAverageRateAfterBurst(pct7List))) + '\n')
-        #outFd.write('%.06f\n' % getAverageRateAfterBurst(pct7List))
-        outFd.write(fields[0] + '\t' + '%.06f\n' % getAverageRateAfterBurst(pct7List))
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        pct7List = getPercentage(vcilist[0:7]) 
+        #outFd.write(fields[0] + '\t' + '%.06f\n' % getAverageRateAfterBurst(pct7List) \
+        outFd.write(fields[0] + '\t' + str(sum(vcilist[0:7])) + '\t' + str(sum(vcilist)) \
+                    + '\t' + str(getAverageRateAfterBurst(pct7List)) + '\n')
     inFd.close()
     outFd.close()
     
 def getI7N30(infile, outfile):
-
-def getN7N30(infile, outfile):    
+    inFd = open(infile, 'r')
+    outFd = open(outfile, 'w')
+    for line in inFd.readlines():
+        fields = line.strip().split('\t', -1)
+        vcilist = []
+        # vid, i1, i2, ..., i30
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        outFd.write(fields[0])
+        for i in range(0, 7):
+            outFd.write('\t' + str(vcilist[i]))
+        outFd.write('\t' + str(sum(vcilist)) + '\n')
+    inFd.close()
+    outFd.close()
+ 
+def getN7N30(infile, outfile):
+    inFd = open(infile, 'r')
+    outFd = open(outfile, 'w')
+    for line in inFd.readlines():
+        fields = line.strip().split('\t', -1)
+        vcilist = []
+        # vid, i1, i2, ..., i30
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        outFd.write(fields[0] + '\t' + str(sum(vcilist[0:7])) + '\t' + str(sum(vcilist)) + '\n')
+    inFd.close()
+    outFd.close()
 
 if __name__ == '__main__':
     #getI30Pct('F:\\Video_Popularity\\rawdata\\I30', 'percentage')
     
     # get type data
     #getBurstSlow('F:\\Video_Popularity\\rawdata\\I30', 'I30_BurstSlow')
+    #getN7N30('I30_BurstSlow', 'N7N30_BurstSlow')
+    #getI7N30('I30_BurstSlow', 'I7N30_BurstSlow')
     getRateForBurstSlow('I30_BurstSlow', 'BurstSlow_rate')
     
     print('All Done!')
