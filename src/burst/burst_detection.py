@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import data.data_extractor as data_extractor
+
 def getPercentage(vcilist):
     s = sum(vcilist)
     pctList = []
@@ -29,9 +31,11 @@ def getI30Pct(infile, outfile):
     outFd.close()
 
 def typeBurstSlow(pctList):
+    # not begin with burst
     if((3 * 1. / 30) >= pctList[0]):
         return False
     else:
+        # check if has more than 1 burst
         flag = True
         for pct in pctList[1 : 30]:
             if (3 * 1. / 30) < pct:
@@ -120,12 +124,17 @@ def getN7N30(infile, outfile):
     outFd.close()
 
 if __name__ == '__main__':
-    #getI30Pct('F:\\Video_Popularity\\rawdata\\I30', 'percentage')
+    getI30Pct('F:\\Video_Popularity\\rawdata\\150801+151017\\I30', 
+              'F:\\Video_Popularity\\src\\burst\\150801+151017\\percentage')
     
     # get type data
-    #getBurstSlow('F:\\Video_Popularity\\rawdata\\I30', 'I30_BurstSlow')
+    getBurstSlow('F:\\Video_Popularity\\rawdata\\150801+151017\\I30', 
+                 'F:\\Video_Popularity\\src\\burst\\150801+151017\\I30_BurstSlow')
+    data_extractor.getNIxN30('F:\\Video_Popularity\\src\\burst\\150801+151017\\I30_BurstSlow', 
+                            'F:\\Video_Popularity\\src\\burst\\150801+151017\\N7N30_BurstSlow', 
+                            'F:\\Video_Popularity\\src\\burst\\150801+151017\\I7N30_BurstSlow', 7)
     #getN7N30('I30_BurstSlow', 'N7N30_BurstSlow')
     #getI7N30('I30_BurstSlow', 'I7N30_BurstSlow')
-    getRateForBurstSlow('I30_BurstSlow', 'BurstSlow_rate')
+    #getRateForBurstSlow('I30_BurstSlow', 'BurstSlow_rate')
     
     print('All Done!')

@@ -59,6 +59,23 @@ def getIxN30(infile, outfile, x):
         outFd.write('\t' + str(sum(vcilist)) + '\n')
     inFd.close()
     outFd.close()
+    
+def getNIxN30(infile, outNfile, outIfile, x):
+    inFd = open(infile.decode('UTF-8'), 'r')
+    outNFd = open(outNfile.decode('UTF-8'), 'w')
+    outIFd = open(outIfile.decode('UTF-8'), 'w')
+    for line in inFd.readlines():
+        vcilist = []
+        fields = line.strip().split('\t')
+        # vid, n1, n2, n3, ... , n30
+        for i in range(1, 1 + 30):
+            vcilist.append(int(fields[i]))
+        outFd.write(fields[0])
+        for i in range(1, 1 + x):
+            outFd.write('\t' + fields[i])
+        outFd.write('\t' + str(sum(vcilist)) + '\n')
+    inFd.close()
+    outFd.close()
 
 
 if __name__ == '__main__':
