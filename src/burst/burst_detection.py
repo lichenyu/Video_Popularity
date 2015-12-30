@@ -1,7 +1,5 @@
-from tarfile import LENGTH_LINK
+# -*- coding: utf-8 -*-
 
-#def detectBurst(vcilist):
-    
 def getPercentage(vcilist):
     s = sum(vcilist)
     pctList = []
