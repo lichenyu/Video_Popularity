@@ -1,6 +1,8 @@
 library(stats4)
 
-data = read.table('F:\\Video_Popularity\\rawdata\\150801+151017\\N7N30')
+workpath = 'F:/Video_Popularity/'
+
+data = read.table(paste(workpath, 'rawdata/150801+151017/N7N30', sep = ''))
 n7 = data$V2
 n30 = data$V3
 # get n7 > 0 for log
@@ -36,7 +38,7 @@ log(reg$coefficients)
 # --------------------------------------------------
 
 
-data = read.table('F:\\Video_Popularity\\rawdata\\150801+151017\\I7N30')
+data = read.table(paste(workpath, 'rawdata/150801+151017/I7N30', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4
@@ -55,4 +57,5 @@ summary(reg)
 reg$coefficients
 #1.179124 1.289353 1.241006 1.506698 1.352725 1.731021 2.237415
 # --------------------------------------------------
+
 

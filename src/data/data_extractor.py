@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-    
+
+import info_crawler as crawler
+
 def getI30(infiles, outfile, positiveCheck = True):
     outFd = open(outfile.decode('UTF-8'), 'w')
     for infile in infiles:
@@ -60,28 +62,37 @@ def getIxN30(infile, outfile, x):
     inFd.close()
     outFd.close()
     
-def getNIxN30(infile, outNfile, outIfile, x):
-    inFd = open(infile.decode('UTF-8'), 'r')
-    outNFd = open(outNfile.decode('UTF-8'), 'w')
-    outIFd = open(outIfile.decode('UTF-8'), 'w')
-    for line in inFd.readlines():
-        vcilist = []
-        fields = line.strip().split('\t')
-        # vid, n1, n2, n3, ... , n30
-        for i in range(1, 1 + 30):
-            vcilist.append(int(fields[i]))
-        outFd.write(fields[0])
-        for i in range(1, 1 + x):
-            outFd.write('\t' + fields[i])
-        outFd.write('\t' + str(sum(vcilist)) + '\n')
-    inFd.close()
-    outFd.close()
+# # get NxN30 and IxN30 for a I30 file 
+# def getNIxN30(infile, outNfile, outIfile, x):
+#     inFd = open(infile.decode('UTF-8'), 'r')
+#     outNFd = open(outNfile.decode('UTF-8'), 'w')
+#     outIFd = open(outIfile.decode('UTF-8'), 'w')
+#     for line in inFd.readlines():
+#         vcilist = []
+#         fields = line.strip().split('\t')
+#         # vid, n1, n2, n3, ... , n30
+#         for i in range(1, 1 + 30):
+#             vcilist.append(int(fields[i]))
+#         # NxN30 output
+#         outNFd.write(fields[0] + '\t' + str(sum(vcilist[0 : x])) + '\t' + str(sum(vcilist)) + '\t')
+#         # IxN30 output
+#         outIFd.write(fields[0])
+#         for i in range(1, 1 + x):
+#             outIFd.write('\t' + fields[i])
+#         outIFd.write('\t' + str(sum(vcilist)) + '\n')
+#     inFd.close()
+#     outNFd.close()
+#     outIFd.close()
 
 
 if __name__ == '__main__':
-    infiles = ['F:\\Video_Popularity\\rawdata\\150801+151017\\151017-151115', 'F:\\Video_Popularity\\rawdata\\150801+151017\\150801-150901']
-    #getN30(infiles, 'F:\\Video_Popularity\\rawdata\\150801+151017\\N30')
-    #getI30(infiles, 'F:\\Video_Popularity\\rawdata\\150801+151017\\I30')
-    getNxN30('F:\\Video_Popularity\\rawdata\\150801+151017\\N30', 'F:\\Video_Popularity\\rawdata\\150801+151017\\N7N30', 7)
-    getIxN30('F:\\Video_Popularity\\rawdata\\150801+151017\\I30', 'F:\\Video_Popularity\\rawdata\\150801+151017\\I7N30', 7)
+    workpath = 'F:/Video_Popularity/'
+#     infiles = [workpath + 'rawdata/150801+151017/151017-151115', workpath + 'rawdata/150801+151017/150801-150901']
+#     getN30(infiles, workpath + 'rawdata/150801+151017/N30')
+#     getI30(infiles, workpath + 'rawdata/150801+151017/I30')
+#     getNxN30(workpath + 'rawdata/150801+151017/N30', workpath + 'rawdata/150801+151017/N7N30', 7)
+#     getIxN30(workpath + 'rawdata/150801+151017/I30', workpath + 'rawdata/150801+151017/I7N30', 7)
+    crawler.getVideoMetadata(workpath + 'rawdata/150801+151017/N30', workpath + 'rawdata/150801+151017/VideoMetadata')
+    crawler.getUserList(workpath + 'rawdata/150801+151017/VideoMetadata', workpath + 'rawdata/150801+151017/UserList')
+    crawler.getUserMetadata(workpath + 'rawdata/150801+151017/UserList', workpath + 'rawdata/150801+151017/UserMetadata')
     print('All Done!')
