@@ -2,9 +2,9 @@ library(stats4)
 
 workpath = 'F:/Video_Popularity/'
 
-data = read.table(paste(workpath, 'rawdata/150801+151017/N7N30', sep = ''))
-n7 = data$V2
-n30 = data$V3
+data = read.table(paste(workpath, 'src/pattern/150801+151017/N30_training', sep = ''))
+n7 = data$V8
+n30 = data$V31
 # get n7 > 0 for log
 idx = which(n7 > 0)
 length(n7) - length(idx)
@@ -38,7 +38,7 @@ log(reg$coefficients)
 # --------------------------------------------------
 
 
-data = read.table(paste(workpath, 'rawdata/150801+151017/I7N30', sep = ''))
+data = read.table(paste(workpath, 'src/pattern/150801+151017/I30_training', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4
@@ -46,7 +46,8 @@ i4 = data$V5
 i5 = data$V6
 i6 = data$V7
 i7 = data$V8
-n30 = data$V9
+d = as.data.frame(data)
+n30 = rowSums(d[2:31])
 
 
 # --------------------------------------------------

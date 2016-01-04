@@ -13,7 +13,6 @@ def sendRequest(url, info_str):
             res = resFd.read()
         except urllib2.HTTPError as e:
             print(str(e))
-            print(e.read())
             print('Retrying...')
             tryNum = tryNum + 1
         except urllib2.URLError as e:

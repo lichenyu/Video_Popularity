@@ -1,29 +1,17 @@
-library(stats4)
+workpath = 'F:/Video_Popularity/'
 
-data = read.table('F:\\Video_Popularity\\src\\burst\\BurstSlow_rate')
-n7 = data$V2
-n30 = data$V3
-rate = data$V4
+data = read.table(paste(workpath, 'src/pattern/150801+151017/I30_others_training', sep = ''))
+i1 = data$V2
+i2 = data$V3
+i3 = data$V4
+i4 = data$V5
+i5 = data$V6
+i6 = data$V7
+i7 = data$V8
+d = as.data.frame(data)
+n30 = rowSums(data[2:31])
 
 
-
-# --------------------------------------------------
-# Linear with least weighted squares
-# n30 = a * n7
-reg = lm(n30 ~ n7 - 1, weights = (1 / n30) ^ 2)
+reg = lm(n30 ~ i1 + i2 + i3 + i4 + i5 + i6 + i7 - 1, weights = (1 / n30)^2)
 summary(reg)
 reg$coefficients
-# ---
-
-idx = which(rate != 0)
-rate_p = rate[idx]
-n30_p = n30[idx]
-n7_p = n7[idx]
-rate_n7_p = rate_p * n7_p
-reg = lm(n30_p ~ rate_n7_p - 1, weights = (1 / n30_p) ^ 2)
-summary(reg)
-reg$coefficients
-# 0.6653772
-# --------------------------------------------------
-
-# n30 - n7 = (a * rate + b) * n7
