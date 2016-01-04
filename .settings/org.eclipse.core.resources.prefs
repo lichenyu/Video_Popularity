@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/data/data_extractor.py=utf-8
 encoding//src/data/info_crawler.py=utf-8
+encoding//src/detection/feature_extractor.py=utf-8
 encoding//src/model/prediction_model.py=utf-8
 encoding//src/pattern/burst_detector.py=utf-8
 encoding//src/pattern/pattern_detector.py=utf-8
