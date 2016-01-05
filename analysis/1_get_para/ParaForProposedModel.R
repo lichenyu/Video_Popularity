@@ -1,9 +1,10 @@
-workpath = 'F:/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
 
 #--------------------------------------------------
 # PBML + indicator*a*n7
-data = read.table(paste(workpath, 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others_training', sep = ''))
+data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017_2/I30_others_training', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4
