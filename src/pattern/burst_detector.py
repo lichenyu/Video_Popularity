@@ -28,6 +28,27 @@ def addBurstFlag2I(infile, outfile, indidx, threshold):
             outFd.write(line.strip() + '\t0\n')
     inFd.close()
     outFd.close()
+    
+def extractBurstRecords(infile, outfile, indidx, threshold):
+    inFd = open(infile, 'r')
+    outFd = open(outfile, 'w')
+    for line in inFd.readlines():
+        fields = line.strip().split('\t', -1)
+        vcilist = []
+        # vid, i1, i2, ..., i30
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        vc = sum(vcilist)
+        burst = 0
+        for vci in vcilist[indidx : 30]:
+            if threshold <= (vci * 1. / vc):
+                burst = vci
+                break
+        if 0 < burst:
+            outFd.write(line.strip() + '\t' + str(burst) + '\n')
+            
+    inFd.close()
+    outFd.close()
 
 if __name__ == '__main__':
     print(hasBurst([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
