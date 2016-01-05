@@ -67,17 +67,17 @@ def getUserList(infile, outfile):
     inFd = open(infile, 'r')
     outFd = open(outfile, 'w')
     
-    userList = set()
+    userSet = set()
     videoNum = 0
     for line in inFd.readlines():
         metadataBatch = json.loads(line)
         for metadata in metadataBatch['videos']:
-            if False == (metadata['user']['id'] in userList):
-                userList.add(metadata['user']['id'])
+            if False == (metadata['user']['id'] in userSet):
+                userSet.add(metadata['user']['id'])
             videoNum = videoNum + 1
-    for uid in userList:
+    for uid in userSet:
         outFd.write(uid + '\n')
-    print('Total ' + str(videoNum) + ' Videos by ' + str(len(userList)) + ' Users')
+    print('Total ' + str(videoNum) + ' Videos by ' + str(len(userSet)) + ' Users')
     
     inFd.close()
     outFd.close()

@@ -1,0 +1,32 @@
+视频：
+title	视频标题（长度）
+description	视频描述（长度）
+duration	视频时长
+category	视频分类
+public_type	公开类型 all: 公开 friend: 仅好友观看 password: 输入密码观看
+tags	视频标签（个数）
+copyright_type	版权所有 original: 原创 reproduced: 转载
+streamtypes	视频格式 flvhd flv 3gphd 3gp hd hd2
+
+view_count	第七天播放数
+favorite_count	第七天收藏数
+comment_count	第七天评论数
+up_count	第七天顶数
+down_count	第七天踩数
+
+用户：
+name
+gender	性别 男：m 女：f 未知：u
+description	描述（长度）
+videos_count	总视频数
+playlists_count	总专辑数
+favorites_count	总收藏视频数
+followers_count	粉丝数
+following_count	关注数
+statuses_count	动态数
+subscribe_count	被订阅数
+vv_count	总视频播放数
+is_vip
+is_share
+is_verified
+regist_time	注册时间（用户年龄）

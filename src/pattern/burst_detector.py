@@ -49,6 +49,27 @@ def extractBurstRecords(infile, outfile, indidx, threshold):
             
     inFd.close()
     outFd.close()
+    
+def extractBurstRecords(infile, outfile, indidx, minpct, minburst):
+    inFd = open(infile, 'r')
+    outFd = open(outfile, 'w')
+    for line in inFd.readlines():
+        fields = line.strip().split('\t', -1)
+        vcilist = []
+        # vid, i1, i2, ..., i30
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        vc = sum(vcilist)
+        burst = 0
+        for vci in vcilist[indidx : 30]:
+            if minpct <= (vci * 1. / vc):
+                burst = vci
+                break
+        if minburst <= burst:
+            outFd.write(line.strip() + '\t' + str(burst) + '\n')
+            
+    inFd.close()
+    outFd.close()
 
 if __name__ == '__main__':
     print(hasBurst([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
