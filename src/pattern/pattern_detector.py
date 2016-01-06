@@ -2,7 +2,6 @@
 
 import dataset_generator
 import burst_detector
-from doctest import testfile
 
 def getPercentage(vcilist):
     s = sum(vcilist)
@@ -87,6 +86,47 @@ def getI7Pattern_2(infile, outfile):
             else:
                 statelist.append(2)
 #         outFd.write(fields[0] + '\t' + str(statelist) + '\n')
+        outFd.write(fields[0] + '\t')
+        for state in statelist:
+            outFd.write(str(state))
+        outFd.write('\n')
+    inFd.close()
+    outFd.close()
+    
+def getI7NewPattern(infile, outfile):
+    inFd = open(infile, 'r')
+    outFd = open(outfile, 'w')
+    for line in inFd.readlines():
+        fields = line.strip().split('\t', -1)
+        vcilist = []
+        # vid, i1, i2, ..., i30
+        for fie in fields[1 : 1 + 30]:
+            vcilist.append(int(fie))
+        # get pct
+        pct7List = getPercentage(vcilist[0 : 0 + 7])
+        statelist = []
+        # get state list
+        for pct in pct7List:
+            if 3 * 1. / 7 > pct:
+                statelist.append(0)
+            else:
+                statelist.append(1)
+                
+        # get new pattern from state list
+        # check back
+        for i in range(0, 0 + 6):
+            if (1 == statelist[i]) and (0 == statelist[i + 1]) and (1. / 7 < pct7List[i + 1]):
+                statelist[i + 1] = 1
+        # check forward
+        for i in range(6, 0, -1):
+            if (1 == statelist[i]) and (0 == statelist[i - 1]) and (1. / 7 < pct7List[i - 1]):
+                statelist[i - 1] = 1
+                
+#         outFd.write(line)
+#         outFd.write(fields[0])
+#         for pct in pct7List:
+#             outFd.write('\t' + str('%.02f' % pct))
+#         outFd.write('\n')
         outFd.write(fields[0] + '\t')
         for state in statelist:
             outFd.write(str(state))
@@ -179,44 +219,44 @@ if __name__ == '__main__':
     #workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
 
-    # random dataset
+    # random dataset and new pattern
     getDatesets([workpath + 'rawdata/150801+151017/I30'], 
-                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
-                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test')
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test')
     
     # for training set
-    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
-                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_pct')
-    getI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
-                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern')
-    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern_count')
-    
+    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training_pct')
+    getI7NewPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training_I7pattern_count')
+     
     # for test set
-    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
-                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_pct')
-    getI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
-                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern')
-    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern_count')
-    
+    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test_pct')
+    getI7NewPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test_I7pattern_count')
+     
     # for total
     getI7I30Pct(workpath + 'rawdata/150801+151017/I30', 
-                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_pct')
-    getI7Pattern(workpath + 'rawdata/150801+151017/I30', 
-                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern')
-    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern_count')
-
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_total_pct')
+    getI7NewPattern(workpath + 'rawdata/150801+151017/I30', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_total_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_total_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_total_I7pattern_count')
+ 
     # get pattern records of the training set for para
-    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern', 
-                      workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
-                      ['1000000', '1100000', '0000000', '0100000', '1010000'])
-
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training', 
+                      ['1000000', '1100000', '0000000', '1110000', '0010000'])
+ 
     # get pattern records of the test set
-    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern', 
-                      workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
-                      ['1000000', '1100000', '0000000', '0100000', '1010000'])
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_test', 
+                      ['1000000', '1100000', '0000000', '1110000', '0010000'])
 
 
 
