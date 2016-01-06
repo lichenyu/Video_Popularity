@@ -2,6 +2,7 @@
 
 import dataset_generator
 import burst_detector
+from doctest import testfile
 
 def getPercentage(vcilist):
     s = sum(vcilist)
@@ -152,213 +153,104 @@ def getRecordForOtherPatterns(patternFile, recordFile, patterns, outFile):
             outFd.write(line)
     recordFd.close()
     outFd.close()
+    
+def getPatternRecords(patternFile, recordFile, patterns):
+    outfiles = []
+    for p in patterns:
+        getRecordByPattern(patternFile, recordFile, p, recordFile + '_' + p)
+        outfiles.append(recordFile + '_' + p)
+    getRecordForOtherPatterns(patternFile, recordFile, patterns, recordFile + '_others')
+    outfiles.append(recordFile + '_others')
+    return outfiles
+    
+def getDatesets(infiles, trainingfile, testfile):
+    traininglist = []
+    testlist = []
+    for f in infiles:
+        dataset_generator.splitFile(f, f + '_training', f + '_test')
+        traininglist.append(f + '_training')
+        testlist.append(f + '_test')
+    dataset_generator.mergeFile(traininglist, trainingfile)
+    dataset_generator.mergeFile(testlist, testfile)
+    
 
 if __name__ == '__main__':
-    #workpath = 'F:/Video_Popularity/'
-    workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
+    workpath = 'F:/Video_Popularity/'
+    #workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
+
+    # random dataset
+    getDatesets([workpath + 'rawdata/150801+151017/I30'], 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test')
+    
+    # for training set
+    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_pct')
+    getI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern_count')
+    
+    # for test set
+    getI7I30Pct(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_pct')
+    getI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern_count')
+    
+    # for total
+    getI7I30Pct(workpath + 'rawdata/150801+151017/I30', 
+                workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_pct')
+    getI7Pattern(workpath + 'rawdata/150801+151017/I30', 
+                 workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern')
+    countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_total_I7pattern_count')
+
+    # get pattern records of the training set for para
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', 
+                      ['1000000', '1100000', '0000000', '0100000', '1010000'])
+
+    # get pattern records of the test set
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_test', 
+                      ['1000000', '1100000', '0000000', '0100000', '1010000'])
+
+
+
+
+#     # for auto generation
 #     getI7I30Pct(workpath + 'rawdata/150801+151017/I30', 
-#                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/percentage')
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/percentage')
+#     getI7Pattern(workpath + 'rawdata/150801+151017/I30', 
+#                  workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I7_pattern')
+#     countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I7_pattern', 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I7_pattern_count')
+#     pr = getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I7_pattern', 
+#                            workpath + 'rawdata/150801+151017/I30', 
+#                            ['1000000', '1100000', '0000000', '0100000', '1010000'], 
+#                            workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/')
+#     getDatesets(pr, 
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I30_training', 
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_auto/I30_test')
 
-#     burst_detector.addBurstFlag2I(workpath + 'rawdata/150801+151017/I30', 
-#                                   workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                                   7, 0.1)
-#     burst_detector.extractBurstRecords(workpath + 'rawdata/150801+151017/I30', 
-#                                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP_value', 
-#                                        7, 0.1)
-#     burst_detector.extractBurstRecords(workpath + 'rawdata/150801+151017/I30', 
-#                                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP_0.1_50', 
-#                                        7, 0.1, 50)
-
-#     getI7Pattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern')
-#     countI7Pattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                    workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern_count')
-#     
-#     # rank 1
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                        '1000000', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1000000')
-#     # rank 2
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                        '1100000', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1100000')
-#     # rank 3
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                        '0000000', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0000000')    
-#     # rank 4
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                        '0100000', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0100000')
-#     # rank 5
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                        '1010000', 
-#                        workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1010000')
-#     # others
-#     getRecordForOtherPatterns(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I7_pattern', 
-#                              workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_BP', 
-#                              ['1000000', '1100000', '0000000', '0100000', '1010000'], 
-#                              workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others')
-# 
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1000000', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1000000_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1000000_test')
-#     
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1100000', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1100000_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1100000_test')
-#     
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0000000', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0000000_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0000000_test')
-#     
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0100000', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0100000_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0100000_test')
-#     
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1010000', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1010000_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1010000_test')
-#     
-#     dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others_training', 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others_test')
-#      
-#     dataset_generator.mergeFile(
-#                                 [workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1000000_training', 
-#                                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1100000_training', 
-#                                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0000000_training', 
-#                                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_0100000_training', 
-#                                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_1010000_training', 
-#                                  workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_others_training'], 
-#                                 workpath + 'analysis/2_predict_value/PBML+BP/150801+151017/I30_training'
-#                                 )
-
-
-    # consider fast and super fast
+#     # for auto generation and very fast
 #     getI7I30Pct(workpath + 'rawdata/150801+151017/I30', 
-#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/percentage')
-#     
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/percentage')
 #     getI7Pattern_2(workpath + 'rawdata/150801+151017/I30', 
-#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern')
-#     countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern_count')
-    
-    
-    
-#     # rank 1
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '2000000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000')
-# 
-#     # rank 2
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '1000000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000')
-# 
-#     # rank 3
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '1100000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000')
-# 
-#     # rank 4
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '0000000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000')
-# 
-#     # rank 5
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '0100000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000')
-# 
-#     # rank 6
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '1010000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000')
-#     
-#      # rank 7
-#     getRecordByPattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                        workpath + 'rawdata/150801+151017/I30', 
-#                        '0010000', 
-#                        workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000')   
-# 
-#     # others
-#     getRecordForOtherPatterns(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I7_pattern', 
-#                               workpath + 'rawdata/150801+151017/I30',  
-#                               ['2000000', '1000000', '1100000', '0000000', '0100000', '1010000', '0010000'], 
-#                               workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others')
-    
-    
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000_test')
+#                  workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I7_pattern')
+#     countI7Pattern(workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I7_pattern', 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I7_pattern_count')
+#     pr = getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I7_pattern', 
+#                            workpath + 'rawdata/150801+151017/I30', 
+#                            ['2000000', '1000000', '1100000', '0000000', '0100000', '1010000', '0010000'], 
+#                            workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/')
+#     getDatesets(pr, 
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I30_training', 
+#                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2_auto/I30_test')
 
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000_test')
-    
-    dataset_generator.splitFile(workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others_training', 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others_test')
-
-      
-    dataset_generator.mergeFile(
-                                [
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000_training',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others_training'], 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_training'
-                                )
-    dataset_generator.mergeFile(
-                                [
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_2000000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1000000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1100000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0000000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0100000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_1010000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_0010000_test',
-                                 workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_others_test'], 
-                                workpath + 'analysis/2_predict_value/PBML/150801+151017_2/I30_test'
-                                )
 
 
     print('All Done!')

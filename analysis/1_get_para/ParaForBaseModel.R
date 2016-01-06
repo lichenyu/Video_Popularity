@@ -1,9 +1,7 @@
-library(stats4)
+workpath = 'F:/Video_Popularity/'
+#workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
-#workpath = 'F:/Video_Popularity/'
-workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
-
-data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017_2/I30_training', sep = ''))
+data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017_random_dataset/I30_training', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4
@@ -14,16 +12,17 @@ i7 = data$V8
 n7 = rowSums(data[2:8])
 n30 = rowSums(data[2:31])
 
-# get n7 > 0 for log
-idx = which(n7 > 0)
-length(n7) - length(idx)
-n7_p = n7[idx]
-n30_p = n30[idx]
 
 
 # --------------------------------------------------
 # Log-Linear with maximum likelihood estimation
 # ln(y) = ln(x) + c
+library(stats4)
+# get n7 > 0 for log
+idx = which(n7 > 0)
+length(n7) - length(idx)
+n7_p = n7[idx]
+n30_p = n30[idx]
 LL <- function(c, sigma) {
   R = log(n30_p) - log(n7_p) - c
   R = suppressWarnings(dnorm(R, 0, sigma, log = TRUE))
