@@ -1,7 +1,7 @@
 workpath = 'F:/Video_Popularity/'
 #workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
-data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017_newpattern/I30_training', sep = ''))
+data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/I30_training', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4

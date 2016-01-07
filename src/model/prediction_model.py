@@ -271,7 +271,7 @@ def predictByPBML_BP3(infile, outfile, multiLinearLrsPara):
     fd.close()
     predictionFd.close()
 
-def evaluateModels(patterns, testpath, outpath, logLinearPara, linearLrsPara, multiLinearLrsPara, pbmlParas):
+def evaluateModels(patterns, testprefix, outprefix, logLinearPara, linearLrsPara, multiLinearLrsPara, pbmlParas):
     if len(patterns) != len(pbmlParas):
         return -1
     #rv = [len(rseMultiLinearLrsList), sum(rseMultiLinearLrsList)]
@@ -282,20 +282,20 @@ def evaluateModels(patterns, testpath, outpath, logLinearPara, linearLrsPara, mu
     rsePBML = 0
     for i in range(0, len(patterns)):
         print('Pattern ' + patterns[i] + ': ')
-        rv = predictByBaseN7(testpath + 'I30_test_' + patterns[i], 
-                             outpath + 'rse_test_' + patterns[i] + '_baseN7', 
+        rv = predictByBaseN7(testprefix + patterns[i], 
+                             outprefix + patterns[i] + '_baseN7', 
                              logLinearPara, linearLrsPara)
         total = total + rv[0]
         rseLogLinear = rseLogLinear + rv[1]
         rseLinear = rseLinear + rv[3]
         
-        rv = predictByBaseI7(testpath + 'I30_test_' + patterns[i], 
-                             outpath + 'rse_test_' + patterns[i] + '_baseI7', 
+        rv = predictByBaseI7(testprefix + patterns[i], 
+                             outprefix + patterns[i] + '_baseI7', 
                              multiLinearLrsPara)
         rseMultiLinear = rseMultiLinear + rv[1]
         
-        rv = predictByPBML(testpath + 'I30_test_' + patterns[i], 
-                           outpath + 'rse_test_' + patterns[i] + '_pbml', 
+        rv = predictByPBML(testprefix + patterns[i], 
+                           outprefix + patterns[i] + '_pbml', 
                            pbmlParas[i])
         rsePBML = rsePBML + rv[1]
         print('')
@@ -304,52 +304,63 @@ def evaluateModels(patterns, testpath, outpath, logLinearPara, linearLrsPara, mu
           '\nTotal MultiLinear MRSE = ' + str(rseMultiLinear/total) + \
           '\nTotal PBML MRSE = ' + str(rsePBML/total))
         
-def evaluateFitting(patterns, testpath, outpath, logLinearPara, linearLrsPara, multiLinearLrsPara, pbmlParas):
+def evaluateFitting(patterns, testprefix, outprefix, logLinearPara, linearLrsPara, multiLinearLrsPara, pbmlParas):
     if len(patterns) != len(pbmlParas):
         return -1
     for i in range(0, len(patterns)):
         print('Pattern ' + patterns[i] + ': ')
-        predictByBaseN7(testpath + 'I30_training_' + patterns[i], 
-                        outpath + 'rse_training_' + patterns[i] + '_baseN7', 
+        predictByBaseN7(testprefix + patterns[i], 
+                        outprefix + patterns[i] + '_baseN7', 
                         logLinearPara, linearLrsPara)
-        predictByBaseI7(testpath + 'I30_training_' + patterns[i], 
-                        outpath + 'rse_training_' + patterns[i] + '_baseI7', 
+        predictByBaseI7(testprefix + patterns[i], 
+                        outprefix + patterns[i] + '_baseI7', 
                         multiLinearLrsPara)
-        predictByPBML(testpath + 'I30_training_' + patterns[i], 
-                      outpath + 'rse_training_' + patterns[i] + '_pbml', 
+        predictByPBML(testprefix + patterns[i], 
+                      outprefix + patterns[i] + '_pbml', 
                       pbmlParas[i])
 
 if __name__ == '__main__':
     workpath = 'F:/Video_Popularity/'
     #workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
     
-    evaluateModels(['1000000', '1100000', '0000000', '1110000', '0010000', 'others'], 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
+    evaluateModels(['1000000', '1100000', '0000000', 'others'], 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_test_', 
+                   workpath + 'analysis/2_predict_value/PBML/150801+151017/rse_test_', 
                    0.3462903, 1.234574, 
                    [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
                    [
                     [1.177099, 1.297660, 1.190649, 1.574289, 1.383345, 1.701904, 1.952588], 
                     [1.159775, 1.171434, 1.375740, 1.811068, 2.083094, 2.023532, 3.838278], 
                     [1.357835, 1.421140, 1.010211, 1.411544, 1.276410, 1.917169, 3.392477], 
-                    [1.3036099, 1.1794771, 0.9822319, 1.2310219, 0.7703616, 4.8851593, 4.0956121], 
-                    [0.9320525, 1.8519616, 1.0693444, 1.7431395, 2.2926660, 2.0958357, 2.5337601], 
-                    [1.078327, 1.129176, 1.195657, 1.186257, 1.187825, 1.258989, 1.412242]
+                    [1.292994, 1.170078, 1.124354, 1.163465, 1.144220, 1.238313, 1.373610]
                     ])
+#     
+#     evaluateFitting(['1000000', '0000000', '1100000', 'others'], 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_active/4patterns/I30_active_training_', 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_active/4patterns/rse_active_training_', 
+#                    0.3462903, 1.234574, 
+#                    [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
+#                    [
+#                     [1.172852, 1.157283, 1.141730, 1.728174, 1.726009, 1.862370, 2.066463], 
+#                     [1.455354, 1.210279, 1.032734, 1.511062, 1.074896, 1.694086, 3.855173], 
+#                     [1.143831, 1.151531, 1.380812, 1.954694, 2.124467, 2.421991, 4.125015], 
+#                     [1.290821, 1.182476, 1.123870, 1.115366, 1.160633, 1.343272, 1.463081]
+#                     ])
+
     
-    evaluateFitting(['1000000', '1100000', '0000000', '1110000', '0010000', 'others'], 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
-                   0.3462903, 1.234574, 
-                   [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
-                   [
-                    [1.177099, 1.297660, 1.190649, 1.574289, 1.383345, 1.701904, 1.952588], 
-                    [1.159775, 1.171434, 1.375740, 1.811068, 2.083094, 2.023532, 3.838278], 
-                    [1.357835, 1.421140, 1.010211, 1.411544, 1.276410, 1.917169, 3.392477], 
-                    [1.3036099, 1.1794771, 0.9822319, 1.2310219, 0.7703616, 4.8851593, 4.0956121], 
-                    [0.9320525, 1.8519616, 1.0693444, 1.7431395, 2.2926660, 2.0958357, 2.5337601], 
-                    [1.078327, 1.129176, 1.195657, 1.186257, 1.187825, 1.258989, 1.412242]
-                    ])
+#     evaluateFitting(['1000000', '1100000', '0000000', '1110000', '0010000', 'others'], 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017_newpattern/', 
+#                    0.3462903, 1.234574, 
+#                    [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
+#                    [
+#                     [1.177099, 1.297660, 1.190649, 1.574289, 1.383345, 1.701904, 1.952588], 
+#                     [1.159775, 1.171434, 1.375740, 1.811068, 2.083094, 2.023532, 3.838278], 
+#                     [1.357835, 1.421140, 1.010211, 1.411544, 1.276410, 1.917169, 3.392477], 
+#                     [1.3036099, 1.1794771, 0.9822319, 1.2310219, 0.7703616, 4.8851593, 4.0956121], 
+#                     [0.9320525, 1.8519616, 1.0693444, 1.7431395, 2.2926660, 2.0958357, 2.5337601], 
+#                     [1.078327, 1.129176, 1.195657, 1.186257, 1.187825, 1.258989, 1.412242]
+#                     ])
     
     
 #     evaluateModels(['1000000', '1100000', '0000000', '0100000', '1010000', 'others'], 

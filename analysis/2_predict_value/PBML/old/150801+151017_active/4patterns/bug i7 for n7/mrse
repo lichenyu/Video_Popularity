@@ -1,0 +1,31 @@
+--------------------------------------------------
+global para for baseline
+--------------------------------------------------
+Pattern 1100000: 
+Log-Linear MRSE = 0.067440612159, Linear-LRS MRSE = 0.0538493818057
+Multi-Linear-LRS MRSE = 0.0488954377197
+Proposed PBML MRSE = 0.0447155517366
+
+Pattern 0000000: 
+Log-Linear MRSE = 0.157461380807, Linear-LRS MRSE = 0.187470439206
+Multi-Linear-LRS MRSE = 0.153079582082
+Proposed PBML MRSE = 0.141801538647
+
+Pattern 1000000: 
+Log-Linear MRSE = 0.067875467941, Linear-LRS MRSE = 0.0647921659604
+Multi-Linear-LRS MRSE = 0.0567808287341
+Proposed PBML MRSE = 0.0510594439821
+
+Pattern others: 
+Log-Linear MRSE = 0.128997718933, Linear-LRS MRSE = 0.109731122677
+Multi-Linear-LRS MRSE = 0.134355166385
+Proposed PBML MRSE = 0.108208946862
+
+Total LogLinear MRSE = 0.101431075563
+Total Linear MRSE = 0.103436906382
+Total MultiLinear MRSE = 0.0912120415525
+Total PBML MRSE = 0.0824544762582
+--------------------------------------------------
+
+
+
