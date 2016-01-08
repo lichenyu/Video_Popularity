@@ -4,7 +4,7 @@ workpath = 'F:/Video_Popularity/'
 
 #--------------------------------------------------
 # PBML (+ indicator*a*n7)
-data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/I30_training_others', sep = ''))
+data = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_training_bp_predicted_others', sep = ''))
 i1 = data$V2
 i2 = data$V3
 i3 = data$V4

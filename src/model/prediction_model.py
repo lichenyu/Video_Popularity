@@ -200,6 +200,9 @@ def predictByPBML_BP(infile, outfile, multiLinearLrsPara):
     print(mrseStr)
     fd.close()
     predictionFd.close()
+    rv = [len(rseMultiLinearLrsList), sum(rseMultiLinearLrsList)]
+    #print(rv)
+    return rv
     
 # burst with intercept
 def predictByPBML_BP2(infile, outfile, multiLinearLrsPara):
@@ -303,6 +306,22 @@ def evaluateModels(patterns, testprefix, outprefix, logLinearPara, linearLrsPara
           '\nTotal Linear MRSE = ' + str(rseLinear/total) + \
           '\nTotal MultiLinear MRSE = ' + str(rseMultiLinear/total) + \
           '\nTotal PBML MRSE = ' + str(rsePBML/total))
+    
+def evaluateModels_BP(patterns, testprefix, outprefix, pbmlBpParas):
+    if len(patterns) != len(pbmlBpParas):
+        return -1
+    #rv = [len(rseMultiLinearLrsList), sum(rseMultiLinearLrsList)]
+    total = 0
+    rsePBML_BP = 0
+    for i in range(0, len(patterns)):
+        print('Pattern ' + patterns[i] + ': ')
+        rv = predictByPBML_BP(testprefix + patterns[i], 
+                           outprefix + patterns[i] + '_pbml_bp', 
+                           pbmlBpParas[i])
+        total = total + rv[0]
+        rsePBML_BP = rsePBML_BP + rv[1]
+        print('')
+    print('Total PBML_BP MRSE = ' + str(rsePBML_BP/total))
         
 def evaluateFitting(patterns, testprefix, outprefix, logLinearPara, linearLrsPara, multiLinearLrsPara, pbmlParas):
     if len(patterns) != len(pbmlParas):
@@ -323,17 +342,30 @@ if __name__ == '__main__':
     workpath = 'F:/Video_Popularity/'
     #workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
     
-    evaluateModels(['1000000', '1100000', '0000000', 'others'], 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_test_', 
-                   workpath + 'analysis/2_predict_value/PBML/150801+151017/rse_test_', 
-                   0.3462903, 1.234574, 
-                   [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
-                   [
-                    [1.177099, 1.297660, 1.190649, 1.574289, 1.383345, 1.701904, 1.952588], 
-                    [1.159775, 1.171434, 1.375740, 1.811068, 2.083094, 2.023532, 3.838278], 
-                    [1.357835, 1.421140, 1.010211, 1.411544, 1.276410, 1.917169, 3.392477], 
-                    [1.292994, 1.170078, 1.124354, 1.163465, 1.144220, 1.238313, 1.373610]
-                    ])
+#     evaluateModels(['1000000', '1100000', '0000000', 'others'], 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_test_', 
+#                    workpath + 'analysis/2_predict_value/PBML/150801+151017/rse_test_', 
+#                    0.3462903, 1.234574, 
+#                    [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996], 
+#                    [
+#                     [1.177099, 1.297660, 1.190649, 1.574289, 1.383345, 1.701904, 1.952588], 
+#                     [1.159775, 1.171434, 1.375740, 1.811068, 2.083094, 2.023532, 3.838278], 
+#                     [1.357835, 1.421140, 1.010211, 1.411544, 1.276410, 1.917169, 3.392477], 
+#                     [1.292994, 1.170078, 1.124354, 1.163465, 1.144220, 1.238313, 1.373610]
+#                     ])
+# 
+#     print('')
+    
+    evaluateModels_BP(['1000000', '1100000', '0000000', 'others'], 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_bp_predicted_', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/rse_test_bp_predicted_', 
+                      [
+                       [1.13303836, 1.56778510, 1.20767206, 1.58905120, 1.39188641, 1.69839068, 1.95462689, 0.08701042], 
+                       [1.15581926, 1.15783083, 1.44377293, 1.80954588, 2.08781147, 2.00973751, 3.84432552, 0.05316459], 
+                       [1.3829860, 1.4128814, 1.0033576, 1.4065036, 1.2773998, 1.9314988, 3.3870238, -0.0958026], 
+                       [1.28568256, 1.17118281, 1.12463257, 1.16319225, 1.14511441, 1.23762807, 1.37416835, 0.01585824]
+                       ])
+    
 #     
 #     evaluateFitting(['1000000', '0000000', '1100000', 'others'], 
 #                    workpath + 'analysis/2_predict_value/PBML/150801+151017_active/4patterns/I30_active_training_', 

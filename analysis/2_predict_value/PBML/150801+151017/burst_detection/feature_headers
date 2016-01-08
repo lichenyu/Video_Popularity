@@ -1,0 +1,25 @@
+video features: 
+title, description, duration, category, public_type, 
+tags, copyright_type, streamtypes
+
+user features: 
+name, gender, description, videos_count, playlists_count, 
+favorites_count, followers_count, following_count, statuses_count, subscribe_count, 
+vv_count, is_vip, is_share, is_verified
+
+vid, isburst video (label)
+feature vector: 
+title length, digit num in title, digit rate in title, letter num in title, letter rate in title, 
+description length, duration, category, public_type, tag num, 
+copyright_type, streamtype num, whether streamtypes contains hd2, user name length, digit num in user name, 
+digit rate in user name, letter num in user name, letter rate in user name, gender, length of user description, 
+videos_count, playlists_count, favorites_count, followers_count, following_count, 
+statuses_count, subscribe_count, vv_count, is_vip, is_share, 
+is_verified
+
+vc history:
+i1	i2	i3	i4	i5	i6	i7	n7	i1_pct	i2_pct	i3_pct	i4_pct	i5_pct	i6_pct	i7_pct
+
+
+
+vid	label	title_len	title_digit_num	title_digit_rate	title_letter_num	title_letter_rate	video_des_len	duration	category	public_type	tag_num	copyright_type	streamtype_num	streamtypes_hd2	user_len	user_digit_num	user_digit_rate	user_letter_num	user_letter_rate	gender	user_des_len	videos_count	playlists_count	favorites_count	followers_count	following_count	statuses_count	subscribe_count	vv_count	is_vip	is_share	is_verified	i1	i2	i3	i4	i5	i6	i7	n7	i1_pct	i2_pct	i3_pct	i4_pct	i5_pct	i6_pct	i7_pct
