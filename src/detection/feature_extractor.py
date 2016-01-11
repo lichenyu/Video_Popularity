@@ -66,11 +66,10 @@ def getVideoFeatures(videofile):
 #         patternMap[fields[0]] = fields[1]
 #     return patternMap
 
-def extractFeatures(videofile, userfile, labelfile, outfile):
+def extractFeatures(videofile, userfile, labelfile, outfile, details = False):
     userMap = getUserFeatures(userfile)
     videoMap = getVideoFeatures(videofile)
     
-#     pnum = 0
     labelFd = open(labelfile, 'r')
     outFd = open(outfile, 'w')
     for line in labelFd.readlines():
@@ -82,35 +81,71 @@ def extractFeatures(videofile, userfile, labelfile, outfile):
             uid = videoMap[vid][0]
             if uid in userMap:
                 vcilist = []
-                for i in range(1, 1 + 7):
+                for i in range(1, 1 + 30):
                     vcilist.append(int(fields[i]))
                 # extract features
                 features = []
                 # 1:title, description, duration, category, public_type, tags, copyright_type, streamtypes
                 # title length
-                title_length = 0 if isinstance(videoMap[vid][1], NoneType) else len(videoMap[vid][1])
-                features.append(title_length)
+                titleLen = 0 if isinstance(videoMap[vid][1], NoneType) else len(videoMap[vid][1])
+                features.append(titleLen)
                 # ---regular expression---
-                digitpart = re.compile('\d')
-                letterpart = re.compile('[A-Za-z _]')
-                if 0 == title_length:
-                    # dig num in title
+                cncharPart = re.compile(ur'[\u4e00-\u9fa5]')
+                digitPart = re.compile('\d')
+                letterPart = re.compile('[A-Za-z_-]')
+                spacePart = re.compile(r' ')
+                booktitlePart = re.compile(ur'《.*》')
+                if 0 == titleLen:
+                    # cn char num in title
+                    features.append(0)
+                    # cn char rage in title
+                    features.append(0)
+                    # non-cn char num in title
+                    features.append(0)
+                    # non-cn char rate in title
+                    features.append(0)
+                    # digit num in title
                     features.append(0)
                     # dig rate in title
                     features.append(0)
                     # letter num in title
                     features.append(0)
                     # letter rate in title
-                    features.append(0)                    
+                    features.append(0)
+                    # space num in title
+                    features.append(0)
+                    # space rate in title
+                    features.append(0)
+                    # booktitle flag in title
+                    features.append(0)
                 else:
-                    # dig num in title
-                    features.append(len(digitpart.findall(videoMap[vid][1])))
-                    # dig rate in title
-                    features.append(len(digitpart.findall(videoMap[vid][1])) * 1. / len(videoMap[vid][1]))
+                    cncharLen = len(cncharPart.findall(videoMap[vid][1]))
+                    digitLen = len(digitPart.findall(videoMap[vid][1]))
+                    letterLen = len(letterPart.findall(videoMap[vid][1]))
+                    spaceLen = len(spacePart.findall(videoMap[vid][1]))
+                    booktitleFlag = True if 0 < len(booktitlePart.findall(videoMap[vid][1])) else False
+                    # cn char num in title
+                    features.append(cncharLen)
+                    # cn char rage in title
+                    features.append(cncharLen * 1. / titleLen)
+                    # non-cn char num in title
+                    features.append(titleLen - cncharLen)
+                    # non-cn char rate in title
+                    features.append((titleLen - cncharLen) * 1. / titleLen)
+                    # digit num in title
+                    features.append(digitLen)
+                    # digit rate in title
+                    features.append(digitLen * 1. / titleLen)
                     # letter num in title
-                    features.append(len(letterpart.findall(videoMap[vid][1])))
+                    features.append(letterLen)
                     # letter rate in title
-                    features.append(len(letterpart.findall(videoMap[vid][1])) * 1. / len(videoMap[vid][1]))
+                    features.append(letterLen * 1. / titleLen)
+                    # space num in title
+                    features.append(spaceLen)
+                    # space rate in title
+                    features.append(spaceLen * 1. / titleLen)
+                    # booktitle flag in title
+                    features.append(booktitleFlag)
                 # description length
                 features.append(len(videoMap[vid][2]))
                 # duration
@@ -132,15 +167,27 @@ def extractFeatures(videofile, userfile, labelfile, outfile):
                 #favorites_count, followers_count, following_count, statuses_count, subscribe_count
                 #vv_count, is_vip, is_share, is_verified, regist_time
                 # user name length
-                features.append(len(userMap[uid][0]))
-                # dig num in user name
-                features.append(len(digitpart.findall(userMap[uid][0])))
-                # dig rate in user name
-                features.append(len(digitpart.findall(userMap[uid][0])) * 1. / len(userMap[uid][0]))
+                userLen = len(userMap[uid][0])
+                features.append(userLen)
+                userCncharLen = len(cncharPart.findall(userMap[uid][0]))
+                userDigitLen = len(digitPart.findall(userMap[uid][0]))
+                userLetterLen = len(letterPart.findall(userMap[uid][0]))
+                # cn char num in user name
+                features.append(userCncharLen)
+                # cn char rate in user name
+                features.append(userCncharLen * 1. / userLen)
+                # non cn char num in user name
+                features.append(userLen - userCncharLen)
+                # non cn char rate in user name
+                features.append((userLen - userCncharLen) * 1. / userLen)
+                # digit num in user name
+                features.append(userDigitLen)
+                # digit rate in user name
+                features.append(userDigitLen * 1. / userLen)
                 # letter num in user name
-                features.append(len(letterpart.findall(userMap[uid][0])))
+                features.append(userLetterLen)
                 # letter rate in user name
-                features.append(len(letterpart.findall(userMap[uid][0])) * 1. / len(userMap[uid][0]))
+                features.append(userLetterLen * 1. / userLen)
                 # gender
                 features.append(userMap[uid][1])
                 # length of user description
@@ -168,40 +215,37 @@ def extractFeatures(videofile, userfile, labelfile, outfile):
                 # is_verified
                 features.append(False if 0 == userMap[uid][13] else True)
                 # i1 - i7
-                for i in vcilist:
+                for i in vcilist[0 : 0 + 7]:
                     features.append(i)
                 # n7
-                s = sum(vcilist)
+                s = sum(vcilist[0 : 0 + 7])
                 features.append(s)
                 # i1 - i7 pct
-                for i in vcilist:
+                for i in vcilist[0 : 0 + 7]:
                     if 0 == s:
                         features.append(i)
                     else:
-                        features.append(i * 1. / sum(vcilist))
+                        features.append(i * 1. / s)
                 
-#                 # print features
-#                 outFd.write(vid + '\t' + (str(True) if '1' == label else str(False)) + '\n')
-#                 for f in videoMap[vid]:
-#                     outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
-#                 outFd.write('\n')
-#                 for f in userMap[uid]:
-#                     outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
-#                 outFd.write('\n')
-#                 for f in features:
-#                     outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
-#                 outFd.write('\n\n')                
-                
+                if True == details:
+                    # print features
+                    outFd.write(vid + '\t' + str(sum(vcilist)) + '\t' + (str(True) if '1' == label else str(False)) + '\n')
+                    for f in videoMap[vid]:
+                        outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
+                    outFd.write('\n')
+                    for f in userMap[uid]:
+                        outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
+                    outFd.write('\n')
+                    for f in features:
+                        outFd.write((f.encode('UTF-8') if isinstance(f, UnicodeType) else str(f)) + '\t')
+                    outFd.write('\n\n')                
+                else:
                 # output
-                outFd.write(vid + '\t' + (str(True) if '1' == label else str(False)))
-                for f in features:
-                    outFd.write('\t' + (f.encode('unicode-escape') if isinstance(f, UnicodeType) else str(f)))
-                outFd.write('\n')
+                    outFd.write(vid + '\t' + str(sum(vcilist)) + '\t' + (str(True) if '1' == label else str(False)))
+                    for f in features:
+                        outFd.write('\t' + (f.encode('unicode-escape') if isinstance(f, UnicodeType) else str(f)))
+                    outFd.write('\n')
                 
-                
-#                 pnum = pnum + 1
-#                 if pnum > 50:
-#                     return
             else:
                 continue
         else:
@@ -225,12 +269,24 @@ if __name__ == '__main__':
 
 #     extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
 #                     workpath + 'rawdata/150801+151017/UserMetadata', 
-#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training', 
-#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features')
-#     
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features_details', 
+#                     details = True)
+#      
 #     extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
 #                     workpath + 'rawdata/150801+151017/UserMetadata', 
-#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features')
+#       
+#     extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
+#                     workpath + 'rawdata/150801+151017/UserMetadata', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features_details', 
+#                     details = True)
+#      
+#     extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
+#                     workpath + 'rawdata/150801+151017/UserMetadata', 
+#                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp', 
 #                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features')
 
     burst_detector.addBurstPrediction2I(workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_training', 
@@ -242,6 +298,20 @@ if __name__ == '__main__':
                                         workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_results', 
                                         workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_bp_predicted', 
                                         7, 0.1)
+       
+
+#     rv = getVideoFeatures(workpath + 'rawdata/150801+151017/VideoMetadata')
+#     print(rv['XMTM2MDk4MTE4OA=='][1])
+#     print(type(rv['XMTM2MDk4MTE4OA=='][1]))
+#     print(rv['XMTM2MDk4MTE4OA=='][1].encode('unicode-escape'))
+#     cncharPart = re.compile(ur'[\u4e00-\u9fa5]')
+#     print(len(cncharPart.findall(rv['XMTM2MDk4MTE4OA=='][1])))
+#     letterPart = re.compile(r'[a-zA-Z_-]')
+#     print(len(letterPart.findall(rv['XMTM2MDk4MTE4OA=='][1])))
+#     spacePart = re.compile(r' ')
+#     print(len(spacePart.findall(rv['XMTM2MDk4MTE4OA=='][1])))
+#     booktitleFlag = re.compile(ur'《.*》')
+#     print(True if 0 < len(booktitleFlag.findall(rv['XMTM2MDk4MTE4OA=='][1])) else False)
 
     print('All Done!')
 

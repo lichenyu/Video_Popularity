@@ -337,6 +337,21 @@ def evaluateFitting(patterns, testprefix, outprefix, logLinearPara, linearLrsPar
         predictByPBML(testprefix + patterns[i], 
                       outprefix + patterns[i] + '_pbml', 
                       pbmlParas[i])
+        
+def evaluateFitting_BP(patterns, testprefix, outprefix, pbmlBpParas):
+    if len(patterns) != len(pbmlBpParas):
+        return -1
+    total = 0
+    rsePBML_BP = 0
+    for i in range(0, len(patterns)):
+        print('Pattern ' + patterns[i] + ': ')
+        rv = predictByPBML_BP(testprefix + patterns[i], 
+                         outprefix + patterns[i] + '_pbml_bp', 
+                         pbmlBpParas[i])
+        total = total + rv[0]
+        rsePBML_BP = rsePBML_BP + rv[1]
+        print('')
+    print('Total PBML_BP MRSE = ' + str(rsePBML_BP/total))
 
 if __name__ == '__main__':
     workpath = 'F:/Video_Popularity/'
@@ -356,15 +371,17 @@ if __name__ == '__main__':
 # 
 #     print('')
     
+    
     evaluateModels_BP(['1000000', '1100000', '0000000', 'others'], 
                       workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_bp_predicted_', 
                       workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/rse_test_bp_predicted_', 
                       [
-                       [1.13303836, 1.56778510, 1.20767206, 1.58905120, 1.39188641, 1.69839068, 1.95462689, 0.08701042], 
-                       [1.15581926, 1.15783083, 1.44377293, 1.80954588, 2.08781147, 2.00973751, 3.84432552, 0.05316459], 
-                       [1.3829860, 1.4128814, 1.0033576, 1.4065036, 1.2773998, 1.9314988, 3.3870238, -0.0958026], 
-                       [1.28568256, 1.17118281, 1.12463257, 1.16319225, 1.14511441, 1.23762807, 1.37416835, 0.01585824]
+                       [1.13438099, 1.55954722, 1.20420501, 1.58365852, 1.38994276, 1.69189553, 1.92976552, 0.08791733], 
+                       [1.15495425, 1.15622111, 1.45801336, 1.80935336, 2.08933856, 2.00648379, 3.79328955, 0.06294833], 
+                       [1.35399293, 1.42208176, 1.01076799, 1.41198211, 1.27472628, 1.91220165, 3.38468268, 0.01860605], 
+                       [1.25892765, 1.17436627, 1.12278617, 1.15793144, 1.14516887, 1.23594350, 1.36781548, 0.08925755]
                        ])
+    
     
 #     
 #     evaluateFitting(['1000000', '0000000', '1100000', 'others'], 

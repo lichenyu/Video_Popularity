@@ -4,7 +4,7 @@ library(rpart.plot)
 workpath = 'F:/Video_Popularity/'
 
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
-training_df = as.data.frame(training[, 2:length(training)])
+training_df = as.data.frame(training[, 3:length(training)])
 set.seed(10)
 mytree = rpart(label ~ ., training_df, control = rpart.control(xval = 10, cp = 0.001));
 
@@ -16,8 +16,9 @@ mytree_prune = prune(mytree, cp = tree_cp[prune_cp_row, "CP"])
 printcp(mytree_prune)
 print(mytree_prune$variable.importance);
 plot(mytree_prune);
-text(mytree_prune, use.n=T);
+#text(mytree_prune, use.n=T);
 #prp(mytree_prune, faclen = 0, cex = 0.8, extra = 1)
+
 
 
 # training performance
@@ -66,5 +67,13 @@ out_df <- data.frame(test$vid, ll - 1, pl - 1);
 write.table(out_df, 
             file = paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection//rpart/I30_test_results', sep = ''), 
             sep = '\t', quote = FALSE, col.names = FALSE, row.names = FALSE)
+
+
+
+
+
+
+
+
 
 
