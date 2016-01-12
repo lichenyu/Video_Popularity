@@ -40,6 +40,7 @@ write.table(out_df,
 # test performance
 test = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features', sep = ''), header = TRUE)
 levels(test$public_type) = levels(training$public_type)
+set.seed(10)
 predict = predict(myForestrf, test, type = 'class')
 ll = c(test$label)
 pl = c(predict)

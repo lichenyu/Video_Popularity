@@ -290,13 +290,13 @@ if __name__ == '__main__':
 #                     workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features')
 
     burst_detector.addBurstPrediction2I(workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_training', 
-                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_training_results', 
-                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_training_bp_predicted', 
+                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_training_results', 
+                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_training_bp_predicted', 
                                         7, 0.1)
     
     burst_detector.addBurstPrediction2I(workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_test', 
-                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_results', 
-                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/rpart/I30_test_bp_predicted', 
+                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_test_results', 
+                                        workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_test_bp_predicted', 
                                         7, 0.1)
        
 
