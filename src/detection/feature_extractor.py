@@ -117,7 +117,7 @@ def extractFeatures(videofile, userfile, labelfile, outfile, details = False):
                     # space rate in title
                     features.append(0)
                     # booktitle flag in title
-                    features.append(0)
+                    features.append(False)
                 else:
                     cncharLen = len(cncharPart.findall(videoMap[vid][1]))
                     digitLen = len(digitPart.findall(videoMap[vid][1]))
