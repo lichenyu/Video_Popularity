@@ -1,6 +1,7 @@
 library(randomForest)
 
-workpath = 'F:/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
 training_df = as.data.frame(training[, 3:length(training)])

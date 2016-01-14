@@ -1,7 +1,8 @@
 library(rpart)
 library(rpart.plot)
 
-workpath = 'F:/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
 training_df = as.data.frame(training[, 3:length(training)])
@@ -15,7 +16,7 @@ mytree_prune = prune(mytree, cp = tree_cp[prune_cp_row, "CP"])
 
 printcp(mytree_prune)
 print(mytree_prune$variable.importance);
-plot(mytree_prune);
+plot(mytree_prune)
 #text(mytree_prune, use.n=T);
 #prp(mytree_prune, faclen = 0, cex = 0.8, extra = 1)
 
