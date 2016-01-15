@@ -2,22 +2,28 @@ library(randomForest)
 
 #workpath = 'F:/Video_Popularity/'
 workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
-
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
-training_df = as.data.frame(training[, 3:length(training)])
+test = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features', sep = ''), header = TRUE)
+training$statuses_count = NULL
+test$statuses_count = NULL
+levels(test$public_type) = levels(training$public_type)
+training_l = training[, 3]
+training_f = as.data.frame(training[, 4:length(training)])
+training_d = as.data.frame(training[, 3:length(training)])
+test_l = test[, 3]
+test_f = as.data.frame(test[, 4:length(test)])
+test_d = as.data.frame(test[, 3:length(test)])
+
+
+
 set.seed(10)
-myForestrf = randomForest(label ~ ., training_df)
-#print(myForestrf)
-#importance(myForestrf)
-#plot(myForestrf)
-
-
+forest = randomForest(label ~ ., training_d, ntree = 501)
 
 
 
 # training performance
-ll = c(training$label)
-pl = c(myForestrf$predicted)
+ll = c(training_l)
+pl = c(forest$predicted)
 # burst
 length(which(ll == 2))
 # not burst
@@ -39,12 +45,9 @@ write.table(out_df,
 
 
 # test performance
-test = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features', sep = ''), header = TRUE)
-levels(test$public_type) = levels(training$public_type)
-set.seed(10)
-predict = predict(myForestrf, test, type = 'class')
-ll = c(test$label)
-pl = c(predict)
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
 # burst
 length(which(ll == 2))
 # not burst
