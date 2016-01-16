@@ -1,7 +1,7 @@
 library(e1071)
 
-#workpath = 'F:/Video_Popularity/'
-workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
+workpath = 'F:/Video_Popularity/'
+#workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
 test = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features', sep = ''), header = TRUE)
 training$statuses_count = NULL
@@ -15,26 +15,28 @@ test_f = as.data.frame(test[, 4:length(test)])
 test_d = as.data.frame(test[, 3:length(test)])
 
 
-
-accuracy = rep(0, 36)
-g = 10^(-3 : 2)
+#g = 10^(-3 : 2)
 c = 10^(0 : 5)
-g_idx = 1 : 6
-c_idx = 1 : 6
+g = 10^(-3 : -1)
+c_idx = 1 : length(c)
+g_idx = 1 : length(g)
+accuracy = rep(0, length(c) * length(g))
+idx = 1
 for(i in c_idx){
   for(j in g_idx){
     print(i)
     print(c[i])
     print(j)
     print(g[j])
-    print((i - 1) * 6 + j)
+    print(idx)
     set.seed(10)
     svm = svm(label ~ ., data = training_d, gamma = g[j], cost = c[i])
     prediction = predict(svm, test_f)
     ll = c(test_l)
     pl = c(prediction)
-    accuracy[(i - 1) * 6 + j] = length(which(pl == ll & ll == 2)) + length(which(pl == ll & ll == 1))
-    print(accuracy[(i - 1) * 6 + j])
+    accuracy[idx] = length(which(pl == ll & ll == 2)) + length(which(pl == ll & ll == 1))
+    print(accuracy[idx])
+    idx = idx + 1
   }
 }
 

@@ -1,7 +1,7 @@
 library(e1071)
 
-#workpath = 'F:/Video_Popularity/'
-workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
+workpath = 'F:/Video_Popularity/'
+#workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
 training = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/training/I30_training_bp_features', sep = ''), header = TRUE)
 test = read.table(paste(workpath, 'analysis/2_predict_value/PBML/150801+151017/burst_detection/test/I30_test_bp_features', sep = ''), header = TRUE)
 training$statuses_count = NULL
@@ -34,3 +34,16 @@ length(which(pl != ll & ll == 2))
 length(which(pl == ll & ll == 1))
 # not burst -> burst
 length(which(pl != ll & ll == 1))
+
+
+
+accuracy = rep(0, 10)
+k = 1:10
+for(x in k){
+  set.seed(10)
+  naivebayes = naiveBayes(label ~ ., data = training_d, laplace = x)
+  prediction <- predict(naivebayes, test_f)
+  accuracy[x] <- mean(prediction == test_l)
+}
+
+plot(k, accuracy, type = 'b')
