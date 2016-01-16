@@ -16,39 +16,40 @@ test_d = as.data.frame(test[, 3:length(test)])
 
 
 
-set.seed(10)
-tuned = tune(svm, label ~ ., data = training_d, 
-            ranges = list(gamma = 10^(-6 : -1), cost = 10^(0 : 5)), 
-            tunecontrol = tune.control(cross = 3))
-summary(tuned)
-tuned$best.model
-
-set.seed(10)
-svm = svm(label ~ ., data = training_d, gamma = 0.1, cost = 1, cross = 3)
-summary(svm)
-
-
-
-
 accuracy = rep(0, 36)
-g = 10^-(6 : -1)
+g = 10^(-3 : 2)
 c = 10^(0 : 5)
 g_idx = 1 : 6
 c_idx = 1 : 6
 for(i in c_idx){
   for(j in g_idx){
+    print(i)
+    print(c[i])
+    print(j)
+    print(g[j])
+    print((i - 1) * 6 + j)
     set.seed(10)
     svm = svm(label ~ ., data = training_d, gamma = g[j], cost = c[i])
     prediction = predict(svm, test_f)
     ll = c(test_l)
     pl = c(prediction)
     accuracy[(i - 1) * 6 + j] = length(which(pl == ll & ll == 2)) + length(which(pl == ll & ll == 1))
+    print(accuracy[(i - 1) * 6 + j])
   }
 }
 
 
 
+# set.seed(10)
+# tuned = tune(svm, label ~ ., data = training_d, 
+#              ranges = list(gamma = 10^(-6 : -1), cost = 10^(0 : 5)), 
+#              tunecontrol = tune.control(cross = 3))
+# summary(tuned)
+# tuned$best.model
 
+set.seed(10)
+svm = svm(label ~ ., data = training_d, gamma = 0.1, cost = 1, cross = 3)
+summary(svm)
 
 prediction = predict(svm, test_f)
 
