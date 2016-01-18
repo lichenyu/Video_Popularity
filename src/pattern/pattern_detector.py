@@ -63,6 +63,7 @@ def getI7Pattern(infile, outfile):
     inFd.close()
     outFd.close()
     
+# consider burst
 def getI7Pattern_2(infile, outfile):
     inFd = open(infile, 'r')
     outFd = open(outfile, 'w')
@@ -92,6 +93,7 @@ def getI7Pattern_2(infile, outfile):
     inFd.close()
     outFd.close()
     
+# consider more-or-less fast closed to fast 
 def getI7NewPattern(infile, outfile):
     inFd = open(infile, 'r')
     outFd = open(outfile, 'w')
