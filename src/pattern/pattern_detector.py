@@ -267,13 +267,13 @@ if __name__ == '__main__':
 #                    workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_total_I7pattern_count')
   
     # get pattern records of the training set for para
-    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_training_I7pattern', 
-                      workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_training_bp_predicted', 
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017/4patterns/I30_training_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017/4patterns_bp/randomForest/I30_training_bp_predicted', 
                       ['1000000', '1100000', '0000000'])
     
     # get pattern records of the test set
-    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017/I30_test_I7pattern', 
-                      workpath + 'analysis/2_predict_value/PBML/150801+151017/burst_detection/randomForest/I30_test_bp_predicted', 
+    getPatternRecords(workpath + 'analysis/2_predict_value/PBML/150801+151017/4patterns/I30_test_I7pattern', 
+                      workpath + 'analysis/2_predict_value/PBML/150801+151017/4patterns_bp/randomForest/I30_test_bp_predicted', 
                       ['1000000', '1100000', '0000000'])
 
 
