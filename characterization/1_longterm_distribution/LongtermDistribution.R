@@ -1,22 +1,27 @@
-workpath = 'F:/Video_Popularity/'
-#workpath = '/Users/ouyangshuxin/Documents/work/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
 
 data = read.table(paste(workpath, 'rawdata/150801+151017/N30', sep = ''))
 n30 = data$V31
 
+
+
+pdf(paste(workpath, "characterization/1_longterm_distribution/longterm_distribution.pdf", sep = ''), 
+    width = 10, height = 4)
+par(mfrow=c(1, 2))
+
+
+
 e = ecdf(n30)
-
-pdf("C:\\Documents and Settings\\Administrator\\桌面\\vc_day30.pdf", width = 5, height = 7)
-par(mfrow=c(2,1))
-
 #d,l,u,r
 par(mar=c(5, 4, 1, 2) + 0.1)
 plot(e, do.points = FALSE, verticals = TRUE, col.01line = 0, 
-     xlim = c(1, 10000), ylim = c(0, 1), axes = FALSE, xaxs="i", yaxs="i", 
+     xlim = c(1, 100000), ylim = c(0, 1), axes = FALSE, xaxs="i", yaxs="i", 
      main = "", sub = "(a)", xlab = "View Count", ylab = "ECDF", 
      col = "blue", lwd = 2, log = "x"
 )
-axis(side = 1, at = c(1, 10, 100, 1000, 10000), labels = c(1, 10, 100, 1000, 10000), tck = 1, lty = 2)
+axis(side = 1, at = c(1, 10, 100, 1000, 10000, 100000), 
+     labels = expression('10'^0, '10'^1, '10'^2, '10'^3, '10'^4, '10'^5), tck = 1, lty = 2)
 axis(side = 2, at = seq(0, 1, .2), labels = seq(0, 1, .2), las = 2, tck = 1, lty = 2)
 box()
 
@@ -25,21 +30,14 @@ box()
 library(MASS)
 library(fitdistrplus)
 library(actuar)
-n30_100000 = n30[n30 <= 100000]
 fp <- fitdist(n30, "pareto")
-plot(fp)
-#ppcomp(fp, line01lty = 1)
-#summary(fp)
-
-ppcomp(fp, fitpch = 10)
-
 #d,l,u,r
-par(mar=c(6, 4, 1, 2) + 0.1)
-ppcomp(fp, 
-       fitpch = c(2), fitcol = 'red', 
+par(mar=c(5, 4, 1, 2) + 0.1)
+ppcomp(fp, fitcol = 'red', lwd = 10, 
        addlegend = FALSE, line01lty = 1, 
        main = "", sub = "(b)", 
        xlab = "Theoretical Probabilities", ylab = "Empirical Probabilities")
-abline(0, 1)
+abline(0, 1, lty = 2)
+
 
 dev.off()
