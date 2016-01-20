@@ -1,12 +1,12 @@
-workpath = 'F:/Video_Popularity/'
-#workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
 
 data = read.table(paste(workpath, 'characterization/3_evolution_pattern/data', sep = ''))
 
 
 
 pdf(paste(workpath, "characterization/3_evolution_pattern/patterns.pdf", sep = ''), 
-    width = 7.5, height = 5)
+    width = 9, height = 5)#width = 7.5, height = 4.5)
 
 par(mfrow=c(2, 3))
 

@@ -1,5 +1,5 @@
-workpath = 'F:/Video_Popularity/'
-#workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
 
 data = read.table(paste(workpath, 'rawdata/150801+151017/N30', sep = ''))
 n30 = data$V31
@@ -37,7 +37,7 @@ ppcomp(fp, fitcol = 'red', lwd = 10,
        addlegend = FALSE, line01lty = 1, 
        main = "", sub = "(b)", 
        xlab = "Theoretical Probabilities", ylab = "Empirical Probabilities")
-abline(0, 1, lty = 2, col = 'grey')
+abline(0, 1, lty = 2, lwd = 2)
 
 
 dev.off()
