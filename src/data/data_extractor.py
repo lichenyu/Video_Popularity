@@ -86,13 +86,20 @@ def getIxN30(infile, outfile, x):
 
 
 if __name__ == '__main__':
-    workpath = 'F:/Video_Popularity/'
+    #workpath = 'F:/Video_Popularity/'
+    workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
+    
+    infiles = [workpath + 'rawdata/150801+151017/150801-150901']
+    getI30(infiles, workpath + 'rawdata/150801+151017/I30_150801')
+    infiles = [workpath + 'rawdata/150801+151017/151017-151115']
+    getI30(infiles, workpath + 'rawdata/150801+151017/I30_151017')
+    
 #     infiles = [workpath + 'rawdata/150801+151017/151017-151115', workpath + 'rawdata/150801+151017/150801-150901']
 #     getN30(infiles, workpath + 'rawdata/150801+151017/N30')
 #     getI30(infiles, workpath + 'rawdata/150801+151017/I30')
 #     getNxN30(workpath + 'rawdata/150801+151017/N30', workpath + 'rawdata/150801+151017/N7N30', 7)
 #     getIxN30(workpath + 'rawdata/150801+151017/I30', workpath + 'rawdata/150801+151017/I7N30', 7)
-    crawler.getVideoMetadata(workpath + 'rawdata/150801+151017/N30', workpath + 'rawdata/150801+151017/VideoMetadata')
-    crawler.getUserList(workpath + 'rawdata/150801+151017/VideoMetadata', workpath + 'rawdata/150801+151017/UserList')
-    crawler.getUserMetadata(workpath + 'rawdata/150801+151017/UserList', workpath + 'rawdata/150801+151017/UserMetadata')
+#     crawler.getVideoMetadata(workpath + 'rawdata/150801+151017/N30', workpath + 'rawdata/150801+151017/VideoMetadata')
+#     crawler.getUserList(workpath + 'rawdata/150801+151017/VideoMetadata', workpath + 'rawdata/150801+151017/UserList')
+#     crawler.getUserMetadata(workpath + 'rawdata/150801+151017/UserList', workpath + 'rawdata/150801+151017/UserMetadata')
     print('All Done!')

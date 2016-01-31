@@ -1,5 +1,5 @@
-workpath = 'F:/Video_Popularity/'
-#workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
+#workpath = 'F:/Video_Popularity/'
+workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
 
 data = read.table(paste(workpath, 'rawdata/150801+151017/I30', sep = ''))
 n7 = rowSums(data[2:8])
@@ -31,7 +31,12 @@ par(mar=c(5, 5, 1, 2) + 0.1)
 plot(n7, n30, type = "p", pch = 20, cex = 0.4, 
      xlim = c(0, 10000), ylim = c(0, 10000), 
      xlab = "View Count on the 7th Day", ylab = "View Count on the 30th Day", sub = "(a)", 
-     col = "grey")
+     col = "black")
+idx = which(n30 <= 10000)
+n7_10k = n7[idx]
+n30_10k = n30[idx]
+fit = lm(n30_10k ~ n7_10k - 1)
+abline(fit, lwd = 5, col = "red")
 
 #d,l,u,r
 par(mar=c(5, 5, 1, 2) + 0.1)
@@ -61,7 +66,7 @@ par(mar=c(5, 5, 1, 2) + 0.1)
 plot(n7_pattern0, n30_pattern0, type = "p", pch = 20, cex = 0.4, 
      xlim = c(0, 10000), ylim = c(0, 10000), 
      xlab = "View Count on the 7th Day", ylab = "View Count on the 30th Day", sub = "(a)", 
-     col = "grey")
+     col = "black")
 abline(0, 1)
 
 #d,l,u,r
@@ -69,7 +74,7 @@ par(mar=c(5, 5, 1, 2) + 0.1)
 plot(n7_others, n30_others, type = "p", pch = 20, cex = 0.4, 
      xlim = c(0, 10000), ylim = c(0, 10000), 
      xlab = "View Count on the 7th Day", ylab = "View Count on the 30th Day", sub = "(b)", 
-     col = "grey")
+     col = "black")
 abline(0, 1)
 
 
@@ -78,7 +83,7 @@ par(mar=c(5, 5, 1, 2) + 0.1)
 plot(n7_burst_after7, n30_burst_after7, type = "p", pch = 20, cex = 0.4, 
      xlim = c(0, 10000), ylim = c(0, 10000), 
      xlab = "View Count on the 7th Day", ylab = "View Count on the 30th Day", sub = "(c)", 
-     col = "grey")
+     col = "black")
 abline(0, 1)
 
 
