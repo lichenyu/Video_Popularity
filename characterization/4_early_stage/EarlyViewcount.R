@@ -35,8 +35,8 @@ plot(n7, n30, type = "p", pch = 20, cex = 0.4,
 idx = which(n30 <= 10000)
 n7_10k = n7[idx]
 n30_10k = n30[idx]
-fit = lm(n30_10k ~ n7_10k - 1)
-abline(fit, lwd = 5, col = "red")
+fit = lm(n30_10k ~ n7_10k)
+abline(fit, lwd = 2, lty = 2, col = "red")
 
 #d,l,u,r
 par(mar=c(5, 5, 1, 2) + 0.1)

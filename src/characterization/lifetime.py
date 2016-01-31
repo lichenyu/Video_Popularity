@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import math
+import math, json
 
 # get lifetime of each video in I file
 # end point: from which at least mindn inactive days
@@ -138,8 +138,33 @@ def getLifetime(infile, outfile, vciThreshold = 100, rateThreshold = 1.5 * 1. / 
     inFd.close()
     outFd.close()
     
+def getExamplesForLifetime(videoMetadata, lifetimeFile, outFile, lifetime):
+    videoMap = {}
+    metadataFd = open(videoMetadata, 'r')
+    for line in metadataFd.readlines():
+        video_metadata_batch = json.loads(line.strip())['videos']
+        for video_metadata in video_metadata_batch:
+            vid = video_metadata['id']
+            videoMap[vid] = []
+            videoMap[vid].append(video_metadata['title'])
+            videoMap[vid].append(video_metadata['category'])
+            videoMap[vid].append(video_metadata['duration'])
+    metadataFd.close()
+    
+    lifetimeFd = open(lifetimeFile, 'r')
+    outFd = open(outFile, 'w')
+    for line in lifetimeFd.readlines():
+        fields = line.strip().split('\t')
+        #vid, vc, lifetime
+        curLifetime = int(fields[2])
+        if (fields[0] in videoMap) and (lifetime == curLifetime):
+            outFd.write(fields[0] + '\t' + fields[1] + '\t' + videoMap[fields[0]][1].encode('UTF-8') + '\t' + videoMap[fields[0]][2].encode('UTF-8') + '\t' + videoMap[fields[0]][0].encode('UTF-8') + '\n')
+    lifetimeFd.close()
+    outFd.close()
+    
 if '__main__' == __name__:
-    workpath = 'F:/Video_Popularity/'
+    #workpath = 'F:/Video_Popularity/'
+    workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
     
 #     getActiveLifetime(workpath + 'rawdata/150801+151017/I30', 
 #                 workpath + 'characterization/2_lifetime/lifetime_active', 
@@ -149,7 +174,13 @@ if '__main__' == __name__:
 #                 workpath + 'characterization/2_lifetime/lifetime_inactive', 
 #                 minrate = 0.5 * 1./30)
 
-    getLifetime(workpath + 'rawdata/150801+151017/I30', 
-                workpath + 'characterization/2_lifetime/lifetime')
+#     getLifetime(workpath + 'rawdata/150801+151017/I30', 
+#                 workpath + 'characterization/2_lifetime/lifetime')
+
+    #videoMetadata, lifetimeFile, outFile, minLifetime
+    getExamplesForLifetime(workpath + 'rawdata/150801+151017/VideoMetadata',
+                           workpath + 'characterization/2_lifetime/lifetime',
+                           workpath + 'characterization/2_lifetime/20days_lifetime',
+                           20)
     
     print('All Done!')

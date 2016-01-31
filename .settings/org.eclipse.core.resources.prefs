@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/characterization/lifetime.py=utf-8
 encoding//src/data/data_extractor.py=utf-8
 encoding//src/data/info_crawler.py=utf-8
 encoding//src/detection/burst_detector.py=utf-8
