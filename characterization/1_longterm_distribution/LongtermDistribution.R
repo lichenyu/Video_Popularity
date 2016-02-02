@@ -76,3 +76,6 @@ abline(0, 1, lty = 2, lwd = 1)
 dev.off()
 
 
+
+n7p = n7[which(n7 > 0)]
+fp <- fitdist(n7p, "pareto")
