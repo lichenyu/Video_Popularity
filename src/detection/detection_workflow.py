@@ -13,73 +13,80 @@ if __name__ == '__main__':
     #workpath = 'F:/Video_Popularity/'
     
     # split datasets
-    dataset_generator.splitDatesets([workpath + 'rawdata/150801+151017/I30'], 
-                                    workpath + 'prediction/datasets/I30_training', 
-                                    workpath + 'prediction/datasets/I30_test')
+#     dataset_generator.splitDatesets([workpath + 'rawdata/150801+151017/I30'], 
+#                                     workpath + 'prediction/datasets/I30_training', 
+#                                     workpath + 'prediction/datasets/I30_test')
 
-    # detect burst
-    burst_detector.detectBurst(workpath + 'prediction/datasets/I30_training', 
-                               workpath + 'prediction/i7p4/burst_detection/I30_training_bl', 
-                               7, 0.1)
-    burst_detector.detectBurst(workpath + 'prediction/datasets/I30_test', 
-                               workpath + 'prediction/i7p4/burst_detection/I30_test_bl', 
-                               7, 0.1)
-       
-    # detect pattern
-    pattern_detector.getIndiPattern(workpath + 'prediction/datasets//I30_training', 
-                                    workpath + 'prediction/i7p4/pattern_detection/I30_training_pattern', 
-                                    7)
-    pattern_detector.countIndiPattern(workpath + 'prediction/i7p4/pattern_detection/I30_training_pattern', 
-                                      workpath + 'prediction/i7p4/pattern_detection/I30_training_pattern_count')
-    pattern_detector.getIndiPattern(workpath + 'prediction/datasets/I30_test', 
-                                    workpath + 'prediction/i7p4/pattern_detection/I30_test_pattern', 
-                                    7)
-    pattern_detector.countIndiPattern(workpath + 'prediction/i7p4/pattern_detection/I30_test_pattern', 
-                                      workpath + 'prediction/i7p4/pattern_detection/I30_test_pattern_count')
 
-    # extract features
-    feature_extractor.extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
-                                      workpath + 'rawdata/150801+151017/UserMetadata', 
-                                      workpath + 'prediction/i7p4/burst_detection/I30_training_bl', 
-                                      workpath + 'prediction/i7p4/burst_prediction/training_label_features', 
-                                      7)
-    feature_extractor.extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
-                                      workpath + 'rawdata/150801+151017/UserMetadata', 
-                                      workpath + 'prediction/i7p4/burst_detection/I30_test_bl', 
-                                      workpath + 'prediction/i7p4/burst_prediction/test_label_features', 
-                                      7)
+
+#     # detect burst
+#     burst_detector.detectBurst(workpath + 'prediction/datasets/I30_training', 
+#                                workpath + 'prediction/i9p4/burst_detection/I30_training_bl', 
+#                                9, 0.1)
+#     burst_detector.detectBurst(workpath + 'prediction/datasets/I30_test', 
+#                                workpath + 'prediction/i9p4/burst_detection/I30_test_bl', 
+#                                9, 0.1)
+#           
+#     # detect pattern
+#     pattern_detector.getIndiPattern(workpath + 'prediction/datasets//I30_training', 
+#                                     workpath + 'prediction/i9p4/pattern_detection/I30_training_pattern', 
+#                                     9)
+#     pattern_detector.countIndiPattern(workpath + 'prediction/i9p4/pattern_detection/I30_training_pattern', 
+#                                       workpath + 'prediction/i9p4/pattern_detection/I30_training_pattern_count')
+#     pattern_detector.getIndiPattern(workpath + 'prediction/datasets/I30_test', 
+#                                     workpath + 'prediction/i9p4/pattern_detection/I30_test_pattern', 
+#                                     9)
+#     pattern_detector.countIndiPattern(workpath + 'prediction/i9p4/pattern_detection/I30_test_pattern', 
+#                                       workpath + 'prediction/i9p4/pattern_detection/I30_test_pattern_count')
+#    
+#     # extract features
+#     feature_extractor.extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
+#                                       workpath + 'rawdata/150801+151017/UserMetadata', 
+#                                       workpath + 'prediction/i9p4/burst_detection/I30_training_bl', 
+#                                       workpath + 'prediction/i9p4/burst_prediction/training_label_features', 
+#                                       9)
+#     feature_extractor.extractFeatures(workpath + 'rawdata/150801+151017/VideoMetadata', 
+#                                       workpath + 'rawdata/150801+151017/UserMetadata', 
+#                                       workpath + 'prediction/i9p4/burst_detection/I30_test_bl', 
+#                                       workpath + 'prediction/i9p4/burst_prediction/test_label_features', 
+#                                       9)
      
-    # get (RF) burst prediction results and add them to the I file
-    burst_prediction.getPredictionResults(workpath + 'prediction/i7p4/burst_detection/I30_training_bl', 
-                                          workpath + 'prediction/i7p4/burst_prediction/training_bprslts', 
-                                          workpath + 'prediction/i7p4/burst_prediction/I30_training_bp')
-    burst_prediction.getPredictionResults(workpath + 'prediction/i7p4/burst_detection/I30_test_bl', 
-                                          workpath + 'prediction/i7p4/burst_prediction/test_bprslts', 
-                                          workpath + 'prediction/i7p4/burst_prediction/I30_test_bp')
-    # get pattern records of the training set with predictions for para
-    pattern_detector.getRecordsByPattern(workpath + 'prediction/i7p4/burst_prediction/I30_training_bp', 
-                                         workpath + 'prediction/i7p4/pattern_detection/I30_training_pattern', 
-                                         ['1000000', '1100000', '0000000'])
-    # get pattern records of the test set with predictions for para
-    pattern_detector.getRecordsByPattern(workpath + 'prediction/i7p4/burst_prediction/I30_test_bp', 
-                                         workpath + 'prediction/i7p4/pattern_detection/I30_test_pattern', 
-                                         ['1000000', '1100000', '0000000'])
      
-    # predict popularity
-    popularity_prediction.evaluateBaseModels(['1000000', '1100000', '0000000', 'others'], 
-                                             workpath + 'prediction/i7p4/burst_prediction/I30_test_bp_', 
-                                             workpath + 'prediction/i7p4/popularity_prediction/rse_test_', 
-                                             0.3462903, [1.175979, 1.308160, 1.227412, 1.508363, 1.369082, 1.761802, 2.181996])
-    print('')
-    popularity_prediction.evaluateProposedModels(['1000000', '1100000', '0000000', 'others'], 
-                                                 workpath + 'prediction/i7p4/burst_prediction/I30_test_bp_', 
-                                                 workpath + 'prediction/i7p4/popularity_prediction/rse_test_', 
-                                                 [
-                                                  [1.1148868, 1.5946892, 1.2631701, 1.5499933, 1.4332997, 1.7116611, 1.9358164, 0.1368604], 
-                                                  [1.1385718, 1.1455380, 1.5605167, 1.8020644, 2.0741012, 1.9513898, 3.7991007, 0.1591615], 
-                                                  [1.3113564, 1.4350187, 1.0369490, 1.3713631, 1.2888453, 1.8581218, 3.3020149, 0.1459587], 
-                                                  [1.2433989, 1.1757283, 1.1288279, 1.1552937, 1.1294082, 1.2243181, 1.3275145, 0.1216962]
-                                                  ])
+     
+#     # get (RF) burst prediction results and add them to the I file
+#     burst_prediction.getPredictionResults(workpath + 'prediction/i9p4/burst_detection/I30_training_bl', 
+#                                           workpath + 'prediction/i9p4/burst_prediction/training_bprslts', 
+#                                           workpath + 'prediction/i9p4/burst_prediction/I30_training_bp')
+#     burst_prediction.getPredictionResults(workpath + 'prediction/i9p4/burst_detection/I30_test_bl', 
+#                                           workpath + 'prediction/i9p4/burst_prediction/test_bprslts', 
+#                                           workpath + 'prediction/i9p4/burst_prediction/I30_test_bp')
+#     # get pattern records of the training set with predictions for para
+#     pattern_detector.getRecordsByPattern(workpath + 'prediction/i9p4/burst_prediction/I30_training_bp', 
+#                                          workpath + 'prediction/i9p4/pattern_detection/I30_training_pattern', 
+#                                          ['100000000', '110000000', '000000000'])
+#     # get pattern records of the test set with predictions for para
+#     pattern_detector.getRecordsByPattern(workpath + 'prediction/i9p4/burst_prediction/I30_test_bp', 
+#                                          workpath + 'prediction/i9p4/pattern_detection/I30_test_pattern', 
+#                                          ['100000000', '110000000', '000000000'])
+      
+      
+      
+#     # predict popularity
+#     popularity_prediction.evaluateBaseModels(['100000000', '110000000', '000000000', 'others'], 
+#                                              workpath + 'prediction/i9p4/burst_prediction/I30_test_bp_', 
+#                                              workpath + 'prediction/i9p4/popularity_prediction/rse_test_', 
+#                                              9, 0.3064035, [1.161242, 1.213789, 1.113899, 1.294116, 1.228609, 1.468656, 1.596782, 2.146889, 2.455075])
+#     print('')
+#     popularity_prediction.evaluateProposedModels(['100000000', '110000000', '000000000', 'others'], 
+#                                                  workpath + 'prediction/i9p4/burst_prediction/I30_test_bp_', 
+#                                                  workpath + 'prediction/i9p4/popularity_prediction/rse_test_', 
+#                                                  9, 
+#                                                  [
+#                                                   [1.0981059, 1.5911751, 1.1125094, 1.3164351, 1.3433597, 1.5320601, 1.6006977, 2.1938607, 2.1681576, 0.1570093], 
+#                                                   [1.1278235, 1.1244228, 1.1940213, 1.3329566, 1.3704086, 1.3904058, 2.2889247, 2.7879782, 3.4788343, 0.1314889], 
+#                                                   [1.4573596, 0.9983199, 1.0294220, 1.2220001, 1.1563089, 1.2480434, 1.8122482, 2.5332942, 4.4511361, 0.1892338], 
+#                                                   [1.1543809, 1.2228305, 1.1256822, 1.1224990, 1.1324919, 1.2249547, 1.2122635, 1.3744851, 1.5509282, 0.1737234]
+#                                                   ])
 
 
     print('All Done!')

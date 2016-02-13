@@ -32,7 +32,7 @@ def predictByMultiLinear(x, a):
         rv = rv + x[i] * 1. * a[i]
     return int(round(rv))
 
-def evaluateLogLinear(infile, outfile, logLinearPara):
+def evaluateLogLinear(infile, outfile, indidate, logLinearPara):
     inFd = open(infile.decode('UTF-8'), 'r')
     outFd = open(outfile.decode('UTF-8'), 'w')
     rseList = []
@@ -42,9 +42,9 @@ def evaluateLogLinear(infile, outfile, logLinearPara):
         vciList = []
         for i in range(1, 1 + 30):
             vciList.append(int(fields[i]))
-        n7 = sum(vciList[0 : 7])
+        indiN = sum(vciList[0 : indidate])
         obsN30 = sum(vciList)
-        prdN30 = predictByLogLinear(n7, logLinearPara)
+        prdN30 = predictByLogLinear(indiN, logLinearPara)
         rse = getRSE(obsN30, prdN30)
         rseList.append(rse)
         outFd.write(fields[0] + '\t' + str(obsN30) + '\t' + str(prdN30) + '\t' + str(rse) + '\n')
@@ -56,7 +56,7 @@ def evaluateLogLinear(infile, outfile, logLinearPara):
     rv = [len(rseList), sum(rseList)]
     return rv
 
-def evaluateMultiLinear(infile, outfile, multiLinearParas):
+def evaluateMultiLinear(infile, outfile, indidate, multiLinearParas):
     inFd = open(infile.decode('UTF-8'), 'r')
     outFd = open(outfile.decode('UTF-8'), 'w')
     rseList = []
@@ -67,7 +67,7 @@ def evaluateMultiLinear(infile, outfile, multiLinearParas):
         for i in range(1, 1 + 30):
             vciList.append(int(fields[i]))
         obsN30 = sum(vciList)
-        prdN30 = predictByMultiLinear(vciList[0 : 7], multiLinearParas)
+        prdN30 = predictByMultiLinear(vciList[0 : indidate], multiLinearParas)
         rse = getRSE(obsN30, prdN30)
         rseList.append(rse)
         outFd.write(fields[0] + '\t' + str(obsN30) + '\t' + str(prdN30) + '\t' + str(rse) + '\n')
@@ -79,7 +79,7 @@ def evaluateMultiLinear(infile, outfile, multiLinearParas):
     rv = [len(rseList), sum(rseList)]
     return rv
 
-def evaluateEPBP_ML(infile, outfile, modelParas):
+def evaluateEPBP_ML(infile, outfile, indidate, modelParas):
     inFd = open(infile.decode('UTF-8'), 'r')
     outFd = open(outfile.decode('UTF-8'), 'w')
     rseList = []
@@ -92,7 +92,7 @@ def evaluateEPBP_ML(infile, outfile, modelParas):
         obsN30 = sum(vciList)
         burst = int(fields[31])
         # fList = [i1, ..., i7, burst * n7]
-        fList = vciList[0 : 7]
+        fList = vciList[0 : indidate]
         fList.append(burst * sum(fList))
         prdN30 = predictByMultiLinear(fList, modelParas)
         rse = getRSE(obsN30, prdN30)
@@ -107,7 +107,7 @@ def evaluateEPBP_ML(infile, outfile, modelParas):
     return rv
 
 # base models: log-linear, multi-linear
-def evaluateBaseModels(patterns, testprefix, outprefix, logLinearPara, multiLinearLrsPara):
+def evaluateBaseModels(patterns, testprefix, outprefix, indidate, logLinearPara, multiLinearLrsPara):
     # rv = [len(rseList), sum(rseList)]
     total = 0
     rseLogLinear = 0
@@ -117,13 +117,13 @@ def evaluateBaseModels(patterns, testprefix, outprefix, logLinearPara, multiLine
         
         rv = evaluateLogLinear(testprefix + patterns[i], 
                                outprefix + patterns[i] + '_loglinear', 
-                               logLinearPara)
+                               indidate, logLinearPara)
         total = total + rv[0]
         rseLogLinear = rseLogLinear + rv[1]
         
         rv = evaluateMultiLinear(testprefix + patterns[i], 
                                  outprefix + patterns[i] + '_multilinear', 
-                                 multiLinearLrsPara)
+                                 indidate, multiLinearLrsPara)
         rseMultiLinear = rseMultiLinear + rv[1]
         
         print('')
@@ -131,7 +131,7 @@ def evaluateBaseModels(patterns, testprefix, outprefix, logLinearPara, multiLine
           '\nLogLinear MRSE = ' + str(rseLogLinear/total) + \
           '\nTotal MultiLinear MRSE = ' + str(rseMultiLinear/total))
     
-def evaluateProposedModels(patterns, testprefix, outprefix, pbmlBpParas):
+def evaluateProposedModels(patterns, testprefix, outprefix, indidate, pbmlBpParas):
     # rv = [len(rseList), sum(rseList)]
     total = 0
     rseEPBP_ML = 0
@@ -139,7 +139,7 @@ def evaluateProposedModels(patterns, testprefix, outprefix, pbmlBpParas):
         print('Pattern ' + patterns[i] + ': ')
         rv = evaluateEPBP_ML(testprefix + patterns[i], 
                              outprefix + patterns[i] + '_epbp_ml', 
-                             pbmlBpParas[i])
+                             indidate, pbmlBpParas[i])
         total = total + rv[0]
         rseEPBP_ML = rseEPBP_ML + rv[1]
         print('')

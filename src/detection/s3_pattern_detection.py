@@ -46,16 +46,16 @@ def getIndiPattern(infile, outfile, indidate):
         stateList = []
         # get state list
         for pct in indiPcts:
-            if 3 * 1. / 7 > pct:
+            if 3 * 1. / indidate > pct:
                 stateList.append(0)
             else:
                 stateList.append(1)
         # get new pattern from state list
         for i in range(0, 0 + indidate - 1):
-            if (1 == stateList[i]) and (0 == stateList[i + 1]) and (1. / 7 < indiPcts[i + 1]):
+            if (1 == stateList[i]) and (0 == stateList[i + 1]) and (1. / indidate < indiPcts[i + 1]):
                 stateList[i + 1] = 1
-        for i in range(6, 0, -1):
-            if (1 == stateList[i]) and (0 == stateList[i - 1]) and (1. / 7 < indiPcts[i - 1]):
+        for i in range(indidate - 1, 0, -1):
+            if (1 == stateList[i]) and (0 == stateList[i - 1]) and (1. / indidate < indiPcts[i - 1]):
                 stateList[i - 1] = 1
         # output
         outFd.write(fields[0] + '\t')
