@@ -11,7 +11,11 @@ i6 = data$V7
 i7 = data$V8
 i8 = data$V9
 i9 = data$V10
-ni = rowSums(data[2:10])
+i10 = data$V11
+i11 = data$V12
+i12 = data$V13
+i13 = data$V14
+ni = rowSums(data[2:14])
 n30 = rowSums(data[2:31])
 
 
@@ -47,7 +51,7 @@ log(reg$coefficients)
 # --------------------------------------------------
 # Multi-Linear with weighted LS
 # y = a1x1 + ... + a7x7
-reg = lm(n30 ~ i1 + i2 + i3 + i4 + i5 + i6 + i7 + i8 + i9 - 1, weights = (1 / n30)^2)
+reg = lm(n30 ~ i1 + i2 + i3 + i4 + i5 + i6 + i7 + i8 + i9 + i10 + i11 + i12 + i13 - 1, weights = (1 / n30)^2)
 summary(reg)
 reg$coefficients
 # --------------------------------------------------
