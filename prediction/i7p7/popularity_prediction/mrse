@@ -1,0 +1,55 @@
+Pattern 1000000: 
+Log-Linear: Count = 8776, MRSE = 0.0809926990144
+Multi-Linear: Count = 8776, MRSE = 0.0553042746036
+
+Pattern 1100000: 
+Log-Linear: Count = 4925, MRSE = 0.0718269642765
+Multi-Linear: Count = 4925, MRSE = 0.0507684959846
+
+Pattern 0000000: 
+Log-Linear: Count = 1463, MRSE = 0.142028694561
+Multi-Linear: Count = 1463, MRSE = 0.13690694503
+
+Pattern 1110000: 
+Log-Linear: Count = 264, MRSE = 0.0943295444606
+Multi-Linear: Count = 264, MRSE = 0.0792487303602
+
+Pattern 0010000: 
+Log-Linear: Count = 86, MRSE = 0.115071743942
+Multi-Linear: Count = 86, MRSE = 0.0737411104937
+
+Pattern 0100000: 
+Log-Linear: Count = 49, MRSE = 0.107680195628
+Multi-Linear: Count = 49, MRSE = 0.0756730521675
+
+Pattern others: 
+Log-Linear: Count = 323, MRSE = 0.165876907605
+Multi-Linear: Count = 323, MRSE = 0.178327654215
+
+Total Count = 15886
+LogLinear MRSE = 0.0859864941592
+Total MultiLinear MRSE = 0.0644750868318
+
+Pattern 1000000: 
+EPBP_ML: Count = 8776, MRSE = 0.0525490822734
+
+Pattern 1100000: 
+EPBP_ML: Count = 4925, MRSE = 0.0470585448834
+
+Pattern 0000000: 
+EPBP_ML: Count = 1463, MRSE = 0.127584355319
+
+Pattern 1110000: 
+EPBP_ML: Count = 264, MRSE = 0.0797255428811
+
+Pattern 0010000: 
+EPBP_ML: Count = 86, MRSE = 0.0680664030542
+
+Pattern 0100000: 
+EPBP_ML: Count = 49, MRSE = 0.0705340480235
+
+Pattern others: 
+EPBP_ML: Count = 323, MRSE = 0.131223678321
+
+Total Count = 15886
+EPBP_ML MRSE = 0.0599479202976

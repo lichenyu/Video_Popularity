@@ -1,0 +1,14 @@
+Pattern others: 
+Log-Linear: Count = 15886, MRSE = 0.0859864941592
+Multi-Linear: Count = 15886, MRSE = 0.0644750868318
+
+Total Count = 15886
+LogLinear MRSE = 0.0859864941592
+Total MultiLinear MRSE = 0.0644750868318
+
+Pattern others: 
+EPBP_ML: Count = 15886, MRSE = 0.062554247977
+
+Total Count = 15886
+EPBP_ML MRSE = 0.062554247977
+All Done!
