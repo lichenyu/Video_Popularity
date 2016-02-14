@@ -2,8 +2,8 @@ library(randomForest)
 
 #workpath = 'F:/Video_Popularity/'
 workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
-training = read.table(paste(workpath, 'prediction/i13p4/burst_prediction/training_label_features', sep = ''), header = TRUE)
-test = read.table(paste(workpath, 'prediction/i13p4/burst_prediction/test_label_features', sep = ''), header = TRUE)
+training = read.table(paste(workpath, 'prediction/i25p4/burst_prediction/training_label_features', sep = ''), header = TRUE)
+test = read.table(paste(workpath, 'prediction/i25p4/burst_prediction/test_label_features', sep = ''), header = TRUE)
 training$statuses_count = NULL
 test$statuses_count = NULL
 levels(test$public_type) = levels(training$public_type)
@@ -94,11 +94,15 @@ length(which(pl != ll & ll == 1))
 
 idx_fn = which(pl != ll & ll == 2)
 idx_fp = which(pl != ll & ll == 1)
-idx_drop = c(idx_fn[1 : 500], idx_fp[1 : 500])
+if (500 <= length(idx_fp)) {
+  idx_drop = c(idx_fn[1 : 500], idx_fp[1 : 500])
+} else {
+  idx_drop = c(idx_fn[1 : 500], idx_fp[1 : length(idx_fp)])
+}
 
 out_df <- data.frame(training[-idx_drop, ]$vid, ll[-idx_drop] - 1, pl[-idx_drop] - 1);
 write.table(out_df, 
-            file = paste(workpath, 'prediction/i13p4/burst_prediction/training_bprslts', sep = ''), 
+            file = paste(workpath, 'prediction/i25p4/burst_prediction/training_bprslts', sep = ''), 
             sep = '\t', quote = FALSE, col.names = FALSE, row.names = FALSE)
 
 
@@ -122,11 +126,16 @@ length(which(pl != ll & ll == 1))
 
 idx_fn = which(pl != ll & ll == 2)
 idx_fp = which(pl != ll & ll == 1)
-idx_drop = c(idx_fn[1 : 500], idx_fp[1 : 500])
+if (500 <= length(idx_fp)) {
+  idx_drop = c(idx_fn[1 : 500], idx_fp[1 : 500])
+} else {
+  idx_drop = c(idx_fn[1 : 500], idx_fp[1 : length(idx_fp)])
+}
+
 
 out_df <- data.frame(test[-idx_drop, ]$vid, ll[-idx_drop] - 1, pl[-idx_drop] - 1);
 write.table(out_df, 
-            file = paste(workpath, 'prediction/i13p4/burst_prediction/test_bprslts', sep = ''), 
+            file = paste(workpath, 'prediction/i25p4/burst_prediction/test_bprslts', sep = ''), 
             sep = '\t', quote = FALSE, col.names = FALSE, row.names = FALSE)
 
 

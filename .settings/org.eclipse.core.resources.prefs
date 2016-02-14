@@ -9,4 +9,3 @@ encoding//src/detection/s3_pattern_detection.py=utf-8
 encoding//src/detection/s4_feature_extraction.py=utf-8
 encoding//src/detection/s5_burst_prediction.py=utf-8
 encoding//src/detection/s7_popularity_prediction.py=utf-8
-encoding//src/model/prediction_model.py=utf-8
