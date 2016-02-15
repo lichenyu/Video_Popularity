@@ -139,3 +139,137 @@ write.table(out_df,
             sep = '\t', quote = FALSE, col.names = FALSE, row.names = FALSE)
 
 
+
+# --------------------------------------------------
+# feature importance
+# --------------------------------------------------
+
+
+
+#duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2
+#title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len
+#gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified
+#user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len
+#i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct
+
+# - video property
+#label ~ title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct
+
+set.seed(21)
+forest = randomForest(label ~ title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct, training_d, ntree = 501)
+# test - 1000 performance
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
+# burst
+length(which(ll == 2))
+# not burst
+length(which(ll == 1))
+# burst -> burst
+length(which(pl == ll & ll == 2))
+# burst -> not burst
+length(which(pl != ll & ll == 2))
+# not burst -> not burst
+length(which(pl == ll & ll == 1))
+# not burst -> burst
+length(which(pl != ll & ll == 1))
+
+
+
+# - video textual
+#label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct
+
+set.seed(21)
+forest = randomForest(label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct, training_d, ntree = 501)
+# test - 1000 performance
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
+# burst
+length(which(ll == 2))
+# not burst
+length(which(ll == 1))
+# burst -> burst
+length(which(pl == ll & ll == 2))
+# burst -> not burst
+length(which(pl != ll & ll == 2))
+# not burst -> not burst
+length(which(pl == ll & ll == 1))
+# not burst -> burst
+length(which(pl != ll & ll == 1))
+
+
+
+# - user statisitc
+#label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct
+
+set.seed(21)
+forest = randomForest(label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct, training_d, ntree = 501)
+# test - 1000 performance
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
+# burst
+length(which(ll == 2))
+# not burst
+length(which(ll == 1))
+# burst -> burst
+length(which(pl == ll & ll == 2))
+# burst -> not burst
+length(which(pl != ll & ll == 2))
+# not burst -> not burst
+length(which(pl == ll & ll == 1))
+# not burst -> burst
+length(which(pl != ll & ll == 1))
+
+
+
+# - user textual
+#label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct
+
+set.seed(21)
+forest = randomForest(label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + i1 + i2 + i3 + i4 + i5 + i6 + i7 + n7 + i1_pct + i2_pct + i3_pct + i4_pct + i5_pct + i6_pct + i7_pct, training_d, ntree = 501)
+# test - 1000 performance
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
+# burst
+length(which(ll == 2))
+# not burst
+length(which(ll == 1))
+# burst -> burst
+length(which(pl == ll & ll == 2))
+# burst -> not burst
+length(which(pl != ll & ll == 2))
+# not burst -> not burst
+length(which(pl == ll & ll == 1))
+# not burst -> burst
+length(which(pl != ll & ll == 1))
+
+
+
+# - historical popularity
+#label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len
+
+set.seed(21)
+forest = randomForest(label ~ duration + category + public_type + tag_num + copyright_type + streamtype_num + streamtypes_hd2 + title_len + title_cnchar_num + title_cnchar_rate + title_noncnchar_num + title_noncnchar_rate + title_digit_num + title_digit_rate + title_letter_num + title_letter_rate + title_space_num + title_space_rate + title_booktitle_flag + video_des_len + gender + videos_count + playlists_count + favorites_count + followers_count + following_count + subscribe_count + vv_count + is_vip + is_share + is_verified + user_len + user_cnchar_num + user_cnchar_rate + user_noncnchar_num + user_noncnchar_rate + user_digit_num + user_digit_rate + user_letter_num + user_letter_rate + user_des_len, training_d, ntree = 501)
+# test - 1000 performance
+prediction = predict(forest, test_f, type = 'class')
+ll = c(test_l)
+pl = c(prediction)
+# burst
+length(which(ll == 2))
+# not burst
+length(which(ll == 1))
+# burst -> burst
+length(which(pl == ll & ll == 2))
+# burst -> not burst
+length(which(pl != ll & ll == 2))
+# not burst -> not burst
+length(which(pl == ll & ll == 1))
+# not burst -> burst
+length(which(pl != ll & ll == 1))
+
+
+
+
