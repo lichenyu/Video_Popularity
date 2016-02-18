@@ -17,7 +17,7 @@ test_d = as.data.frame(test[, 3:length(test)])
 
 
 set.seed(21)
-forest = randomForest(label ~ ., training_d, ntree = 501)
+forest = randomForest(label ~ ., training_d, ntree = 501, importance = TRUE, xtest = test_f, ytest = test_l)
 
 
 
