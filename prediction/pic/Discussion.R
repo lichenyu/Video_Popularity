@@ -1,7 +1,7 @@
 #workpath = 'F:/Video_Popularity/'
 workpath = '/Users/ouyangshuxin/Documents/Video_Popularity/'
 
-indidate = read.table(paste(workpath, 'prediction/pic/iterate_indidate', sep = ''), sep = ',')
+indidate = read.table(paste(workpath, 'prediction/pic/iterate_indidate_plus', sep = ''), sep = ',')
 pattern = read.table(paste(workpath, 'prediction/pic/iterate_pattern', sep = ''), sep = ',')
 
 indidate_x = seq(5, 25, 2)
