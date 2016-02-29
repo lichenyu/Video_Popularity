@@ -1,0 +1,7 @@
+1. Dataset Split -> training/test set
+2. Burst Detect -> burst: after indicator date 3 * 1 / 30
+3. Pattern Detect -> monitoring period: 3 * 1 / 7 -> rank patterns -> split file according to pattern
+4. Feature Extract
+5. (R) Predict Burst
+6. (R) Get Parameters
+7. Predict Popularity -> get MRSE
